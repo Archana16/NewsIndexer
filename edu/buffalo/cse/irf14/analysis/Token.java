@@ -90,6 +90,6 @@ public class Token {
 	
 	//Remove this method
 	public void addTestMethod(){
-		
+		System.oiut.println("hi archu,wassup");
 	}
 }
