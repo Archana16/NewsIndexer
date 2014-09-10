@@ -86,4 +86,10 @@ public class Token {
 		//TODO: YOU MUST IMPLEMENT THIS METHOD
 		return null;
 	}
+	
+	
+	//Remove this method
+	public void addTestMethod(){
+		
+	}
 }
