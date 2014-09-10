@@ -90,6 +90,6 @@ public class Token {
 	
 	//Remove this method
 	public void addTestMethod(){
-		
+		System.out.println("Hey there");
 	}
 }
