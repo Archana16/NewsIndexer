@@ -34,8 +34,10 @@ public class TFRuleBaseTest {
 			if (t != null) {
 				s = t.toString();
 				
-				if (s!= null && !s.isEmpty())
+				if (s!= null && !s.isEmpty()){
 					list.add(s);	
+					
+				}
 			}
 		}
 		

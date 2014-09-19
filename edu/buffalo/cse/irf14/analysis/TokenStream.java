@@ -3,6 +3,7 @@
  */
 package edu.buffalo.cse.irf14.analysis;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -13,6 +14,18 @@ import java.util.Iterator;
  */
 public class TokenStream implements Iterator<Token>{
 	
+	
+	private ArrayList<Token> mylist;  //ArrayList<Vector> will be set here
+    private int index;
+    
+    public TokenStream(){
+    	
+    }
+
+    public TokenStream(ArrayList<Token> mylist) {
+        this.mylist = mylist;
+        index = 0;
+    }
 	/**
 	 * Method that checks if there is any Token left in the stream
 	 * with regards to the current pointer.
@@ -22,7 +35,12 @@ public class TokenStream implements Iterator<Token>{
 	@Override
 	public boolean hasNext() {
 		// TODO YOU MUST IMPLEMENT THIS
-		return false;
+		if(mylist.size()>1 && index < mylist.size() && index>=0)
+			return true;
+		else if(mylist.size()==1 && index ==0)
+			return true;
+		else
+			return false;
 	}
 
 	/**
@@ -35,7 +53,11 @@ public class TokenStream implements Iterator<Token>{
 	@Override
 	public Token next() {
 		// TODO YOU MUST IMPLEMENT THIS
-		return null;
+				if(index<mylist.size()){
+						return mylist.get(index++);
+				}else{
+					return null;
+				}
 	}
 	
 	/**
@@ -47,7 +69,14 @@ public class TokenStream implements Iterator<Token>{
 	@Override
 	public void remove() {
 		// TODO YOU MUST IMPLEMENT THIS
-		
+		if(index != -1){
+			if(index >  0  && index != mylist.size()){
+				mylist.remove(index-1);
+				index = index-1;
+			}else if(index == mylist.size() && mylist.size() !=0 ){
+				mylist.remove(--index);
+			}	
+		}
 	}
 	
 	/**
@@ -57,6 +86,10 @@ public class TokenStream implements Iterator<Token>{
 	 */
 	public void reset() {
 		//TODO : YOU MUST IMPLEMENT THIS
+		if(mylist.size() > 0)
+			index = 0;
+		else
+			index = -1;
 	}
 	
 	/**
@@ -82,7 +115,16 @@ public class TokenStream implements Iterator<Token>{
 	 */
 	public Token getCurrent() {
 		//TODO: YOU MUST IMPLEMENT THIS
-		return null;
+		if(index>0 && index<= mylist.size()){
+			return mylist.get(index-1);
+		}else
+			return null;
+		/*if(mylist.size() == 1)
+			return mylist.get(0);
+		else if(mylist.size() == 0)
+			return null;
+		else	
+			return mylist.get(index-1);*/
 	}
 	
 }
