@@ -49,7 +49,6 @@ public class Parser {
 			if (testAllUpperCase(token)) {
 				if (token.contains("<AUTHOR>")) {
 					token = words.next();
-					//System.out.println(token);
 					while (true) {
 						if (token.contains("</AUTHOR>")) {
 							token = token.replace("</AUTHOR>", "");
@@ -57,7 +56,7 @@ public class Parser {
 							break;
 						} else {
 							Author += " " + token;
-							token = words.next();
+							token = words.hasNext()?words.next():"";
 						}
 					}
 					String[] parts = Author.split(",");
@@ -73,12 +72,12 @@ public class Parser {
 					String place1= words.next();
 					while(!list.contains(place1.toLowerCase())){
 						Place +=" "+place1;
-						place1 = words.next();
+						place1 = words.hasNext()?words.next():"";
 					}
 					if (list.contains(place1.toLowerCase()) && Date.isEmpty()) {
 						Date = place1;
-						String day = words.next();
-						if (day.contains(","))
+						String day = words.hasNext()?words.next():"";
+						if (day!="" && day.contains(","))
 							day=day.split(",")[0];
 						Date += " " + day;
 					}
@@ -95,11 +94,14 @@ public class Parser {
 	}
 
 	public static Document parse(String filename) throws ParserException {
+		
+		//System.out.println(filename);
+		
 		if(filename == null || filename == ""){
             throw new ParserException("Filename is empty");
         }
-		if(!filename.matches("\\w.txt")){
-            throw new ParserException("Invalid input file");
+		if(!filename.matches("((/[a-zA-Z0-9_.-]+))+")){
+            throw new ParserException("Invalid input file "+filename);
         }
 		// TODO YOU MUST IMPLEMENT THIS
 

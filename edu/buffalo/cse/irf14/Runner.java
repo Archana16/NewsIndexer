@@ -28,10 +28,22 @@ public class Runner {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		/*	
 		String ipDir = args[0];
-		String indexDir = args[1];
+		String indexDir = args[1];*/
 		//more? idk!
 		
+	/*	Document d = null;
+		
+		try {
+			d = Parser.parse( "/home/archana/workspace-ir/IR/news_training/training/dfl/0007273");
+		} catch (Exception e) {//ParserException
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} */
+		
+		String ipDir = "/home/archana/workspace-ir/IR/news_training/training";
+		String indexDir = "dfl";
 		File ipDirectory = new File(ipDir);
 		String[] catDirectories = ipDirectory.list();
 		
