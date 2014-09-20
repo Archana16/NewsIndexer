@@ -83,16 +83,13 @@ public class Token {
 	 */
 	@Override
 	public String toString() {
-		//TODO: YOU MUST IMPLEMENT THIS METHOD
-		return null;
+		
+				if(termText != null)
+					return termText;
+				else
+					return null;
 	}
 	
 	
-	//Remove this method
-	public void addTestMethod(){
-		System.out.println("hi archu,wassup");
-
-		System.out.println("Hey there");
-
-	}
+	
 }

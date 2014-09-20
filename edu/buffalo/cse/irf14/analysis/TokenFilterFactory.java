@@ -23,7 +23,8 @@ public class TokenFilterFactory {
 	 */
 	public static TokenFilterFactory getInstance() {
 		//TODO : YOU MUST IMPLEMENT THIS METHOD
-		return null;
+		return new TokenFilterFactory();
+		//return null;
 	}
 	
 	/**
@@ -35,7 +36,20 @@ public class TokenFilterFactory {
 	 * @return The built {@link TokenFilter} instance
 	 */
 	public TokenFilter getFilterByType(TokenFilterType type, TokenStream stream) {
-		//TODO : YOU MUST IMPLEMENT THIS METHOD
-		return null;
+		TokenFilter tf;
+		if(type == TokenFilterType.STOPWORD){
+			tf = new StopWordFilter(stream);
+			return tf;
+		}else if(type == TokenFilterType.SYMBOL){
+			tf = new SymbolFilter(stream);
+			return tf;
+		}else if(type == TokenFilterType.STEMMER){
+			tf = new StemmingFilter(stream);
+			return tf;
+		}else if(type == TokenFilterType.ACCENT){
+			tf = new AccentFilter(stream);
+			return tf;
+		}else
+			return null;
 	}
 }

@@ -3,7 +3,18 @@
  */
 package edu.buffalo.cse.irf14.index;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import edu.buffalo.cse.irf14.analysis.Token;
+import edu.buffalo.cse.irf14.analysis.TokenFilter;
+import edu.buffalo.cse.irf14.analysis.TokenFilterFactory;
+import edu.buffalo.cse.irf14.analysis.TokenFilterType;
+import edu.buffalo.cse.irf14.analysis.TokenStream;
+import edu.buffalo.cse.irf14.analysis.Tokenizer;
 import edu.buffalo.cse.irf14.document.Document;
+import edu.buffalo.cse.irf14.document.FieldNames;
 
 /**
  * @author nikhillo
@@ -17,6 +28,9 @@ public class IndexWriter {
 	public IndexWriter(String indexDir) {
 		//TODO : YOU MUST IMPLEMENT THIS
 	}
+	public IndexWriter() {
+		//TODO : YOU MUST IMPLEMENT THIS
+	}
 	
 	/**
 	 * Method to add the given Document to the index
@@ -28,6 +42,82 @@ public class IndexWriter {
 	 */
 	public void addDocument(Document d) throws IndexerException {
 		//TODO : YOU MUST IMPLEMENT THIS
+		
+		//TODO : YOU MUST IMPLEMENT THIS
+				try{
+					Tokenizer t= new Tokenizer();
+					
+					for (FieldNames dir : FieldNames.values()) {
+						
+						if(d.getField(dir) != null){
+							
+							System.out.println(dir+" = "+d.getField(dir)[0]);
+							TokenStream tstream = t.consume(d.getField(dir)[0]);
+							TokenFilterFactory factory = TokenFilterFactory.getInstance();
+							
+							
+							TokenFilter filter = factory.getFilterByType(TokenFilterType.STOPWORD, tstream);
+							tstream.reset();
+							while (tstream.hasNext()) {
+								filter.increment();
+							}
+							
+							
+							System.out.println("------------------------------after stopword-------------------------");
+							tstream.reset();
+							while(tstream.hasNext())
+								System.out.println("next is "+tstream.next());
+							
+					
+							
+							filter = factory.getFilterByType(TokenFilterType.SYMBOL, tstream);
+							tstream.reset();
+							while (tstream.hasNext()) {
+								filter.increment();
+							}
+							System.out.println("------------------------------after symbol-------------------------");
+							tstream.reset();
+							while(tstream.hasNext())
+								System.out.println("next is "+tstream.next());
+							
+					
+							tstream.reset();
+							
+							filter = factory.getFilterByType(TokenFilterType.STEMMER, tstream);
+							tstream.reset();
+							while (tstream.hasNext()) {
+								filter.increment();
+							}
+							
+							System.out.println("------------------------------after stemmer-------------------------");
+							tstream.reset();
+							while(tstream.hasNext())
+								System.out.println("next is "+tstream.next());
+							
+					
+							tstream.reset();
+							
+							filter = factory.getFilterByType(TokenFilterType.ACCENT , tstream);
+							tstream.reset();
+							while (tstream.hasNext()) {
+								filter.increment();
+							}
+							
+							System.out.println("------------------------------after accent-------------------------");
+							
+							tstream.reset();
+							while(tstream.hasNext())
+								System.out.println("next is "+tstream.next());
+							
+						}
+					}
+					
+				}catch(Exception e){
+					System.out.println("exception is "+e);
+					
+				}
+				
+				
 	}
 	
 	/**
