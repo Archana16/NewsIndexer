@@ -5,7 +5,9 @@ package edu.buffalo.cse.irf14.index;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import edu.buffalo.cse.irf14.analysis.Token;
 import edu.buffalo.cse.irf14.analysis.TokenFilter;
@@ -56,7 +58,22 @@ public class IndexWriter {
 							TokenFilterFactory factory = TokenFilterFactory.getInstance();
 							
 							
-							TokenFilter filter = factory.getFilterByType(TokenFilterType.STOPWORD, tstream);
+							TokenFilter filter = factory.getFilterByType(TokenFilterType.CAPITALIZATION, tstream);
+							tstream.reset();
+							while (tstream.hasNext()) {
+								filter.increment();
+								
+							}
+							
+							
+							System.out.println("------------------------------after capitalization-------------------------");
+							tstream.reset();
+							while(tstream.hasNext())
+								System.out.println("next is "+tstream.next());
+							
+							
+							
+							/*TokenFilter filter = factory.getFilterByType(TokenFilterType.STOPWORD, tstream);
 							tstream.reset();
 							while (tstream.hasNext()) {
 								filter.increment();
@@ -107,11 +124,11 @@ public class IndexWriter {
 							
 							tstream.reset();
 							while(tstream.hasNext())
-								System.out.println("next is "+tstream.next());
+								System.out.println("next is "+tstream.next());*/
 							
 						}
 					}
-					
+				
 				}catch(Exception e){
 					System.out.println("exception is "+e);
 					

@@ -17,6 +17,10 @@ public class TokenStream implements Iterator<Token>{
 	
 	private ArrayList<Token> mylist;  //ArrayList<Vector> will be set here
     private int index;
+    private int tempIndex;
+    private int previous;
+    private int previousLoop;
+    private int current;
     
     public TokenStream(){
     	
@@ -24,7 +28,10 @@ public class TokenStream implements Iterator<Token>{
 
     public TokenStream(ArrayList<Token> mylist) {
         this.mylist = mylist;
-        index = 0;
+        index = tempIndex = 0;
+        previous = -2;
+        previousLoop = -2;
+        current = -1;
     }
 	/**
 	 * Method that checks if there is any Token left in the stream
@@ -42,7 +49,31 @@ public class TokenStream implements Iterator<Token>{
 		else
 			return false;
 	}
+	
+	public boolean hasPrevious() {
+		// TODO YOU MUST IMPLEMENT THIS
+		if(previousLoop >=0 && mylist.size()>=0 && previousLoop< mylist.size())
+			return true;
+		else
+			return false;
+	}
 
+	public Token previous(){
+		if(previousLoop>0 && mylist.size()>=0)
+			return mylist.get(previousLoop--) ;
+		else if(previousLoop == 0){
+			previousLoop--;
+			return mylist.get(0);
+		}
+		else 			
+			return null;
+	}
+	
+	public void resetPrevious(){
+		System.out.println("previous was "+previous+" and now it is "+previousLoop);
+		previousLoop = previous;
+		
+	}
 	/**
 	 * Method to return the next Token in the stream. If a previous
 	 * hasNext() call returned true, this method must return a non-null
@@ -54,10 +85,34 @@ public class TokenStream implements Iterator<Token>{
 	public Token next() {
 		// TODO YOU MUST IMPLEMENT THIS
 				if(index<mylist.size()){
+						previous++;
+						current++;
+						previousLoop = previous;
 						return mylist.get(index++);
 				}else{
+					if(previous < mylist.size()-1)
+						previous++;
+					current++;
+					index= -1;
+					previousLoop = previous;
 					return null;
 				}
+	}
+	
+	public void setTempIndex(){
+		System.out.println("earlier temp index was "+tempIndex+" index ="+ index);
+		tempIndex = index ;
+		
+	}
+	public void setIndexCurrent(){
+		System.out.println(" index was "+index+" temp index ="+ tempIndex);
+		index = tempIndex;
+		previous = index - 2;
+	}
+	
+	public void getIndex(){
+		
+		System.out.println("current index is "+index);
 	}
 	
 	/**
@@ -69,6 +124,7 @@ public class TokenStream implements Iterator<Token>{
 	@Override
 	public void remove() {
 		// TODO YOU MUST IMPLEMENT THIS
+		current = -9;
 		if(index != -1){
 			if(index >  0  && index != mylist.size()){
 				mylist.remove(index-1);
@@ -115,16 +171,18 @@ public class TokenStream implements Iterator<Token>{
 	 */
 	public Token getCurrent() {
 		//TODO: YOU MUST IMPLEMENT THIS
-		if(index>0 && index<= mylist.size()){
+		if(index>0 && index<= mylist.size() && current != -9){
 			return mylist.get(index-1);
 		}else
 			return null;
-		/*if(mylist.size() == 1)
-			return mylist.get(0);
-		else if(mylist.size() == 0)
-			return null;
-		else	
-			return mylist.get(index-1);*/
+		
 	}
 	
+	public Token getPrevious(){
+		if(previous >=0 && current <= mylist.size()){
+			return mylist.get(previous);
+		}else
+			return null;
+		
+	}
 }

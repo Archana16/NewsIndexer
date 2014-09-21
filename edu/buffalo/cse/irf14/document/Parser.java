@@ -152,19 +152,19 @@ public class Parser {
 		
 		
 		FieldNames f;
-		String content =new String("nа̀ра ('steam/vapour') and nара̀ ('cent/penny, money");
+		String content =new String(" this. pritikaMehta is a test. The city San Francisco is in California. Some bodily fluids, such as saliva and tears, do not transmit HIV. It runs Apple's iOS mobile operating system,");
 				/*@Microbiological Research Corp\n" + 
 				"said it entered into a letter of can't could've couldn't intent for a B-45 A-Biti55  A-Bitibfdn 55BBB-AA proposed business\n" + 
 				"combination with privately owned <DataGene Scientific\n" + 
 				"Laboratories Inc>, and <Milex Corp> a newly formed company,\n" + 
 				"through a stock swap.\n" );*/
-		d.setField(FieldNames.FILEID,"1");
+	/*	d.setField(FieldNames.FILEID,"1");
 		d.setField(FieldNames.CATEGORY,"acq");
 		d.setField(FieldNames.TITLE,"MICROBIO <MRC> PLANS ACQUISITION, FINANCING");
 		//d.setField(FieldNames.AUTHOR,"1");
 		//d.setField(FieldNames.AUTHORORG,"1");
 		d.setField(FieldNames.PLACE,"  BOUNTIFUL, Utah,");
-		d.setField(FieldNames.NEWSDATE,"March 2");
+		d.setField(FieldNames.NEWSDATE,"March 2");*/
 		d.setField(FieldNames.CONTENT,content);
 
 
