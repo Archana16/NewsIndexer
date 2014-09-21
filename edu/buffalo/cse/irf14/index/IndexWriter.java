@@ -5,7 +5,9 @@ package edu.buffalo.cse.irf14.index;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import edu.buffalo.cse.irf14.analysis.Token;
 import edu.buffalo.cse.irf14.analysis.TokenFilter;
@@ -46,9 +48,7 @@ public class IndexWriter {
 	 *             : In case any error occurs
 	 */
 	public void addDocument(Document d) throws IndexerException {
-		// TODO : YOU MUST IMPLEMENT THIS
 
-		// TODO : YOU MUST IMPLEMENT THIS
 		try {
 			Tokenizer t = new Tokenizer();
 
@@ -122,6 +122,20 @@ public class IndexWriter {
 					tstream.reset();
 					while (tstream.hasNext())
 						System.out.println("next is " + tstream.next());
+					
+				   filter = factory.getFilterByType(TokenFilterType.CAPITALIZATION, tstream);
+					tstream.reset();
+					while (tstream.hasNext()) {
+						filter.increment();
+						
+					}
+					
+					
+					System.out.println("------------------------------after capitalization-------------------------");
+					tstream.reset();
+					while(tstream.hasNext())
+						System.out.println("next is "+tstream.next());
+
 				}
 
 			}
