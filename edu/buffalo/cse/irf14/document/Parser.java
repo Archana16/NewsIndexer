@@ -127,25 +127,16 @@ public class Parser {
 			d.setField(FieldNames.TITLE, Title);
 			d.setField(FieldNames.CONTENT, Content);
 			contentParse(Content);
-			System.out.println(d.getField(FieldNames.FILEID)[0]);
-			System.out.println(d.getField(FieldNames.CATEGORY)[0]);
-			System.out.println(d.getField(FieldNames.TITLE)[0]);
-			System.out.println(d.getField(FieldNames.CONTENT)[0]);
-			System.out.println(d.getField(FieldNames.AUTHOR)[0]);
-			System.out.println(d.getField(FieldNames.AUTHORORG)[0]);
-			System.out.println(d.getField(FieldNames.PLACE)[0]);
-			System.out.println(d.getField(FieldNames.NEWSDATE)[0]);
-
 			in.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return d;
 	}
 	
 	
 	//made by pritika
-	public static Document parse() throws ParserException {
+/*	public static Document parse() throws ParserException {
 		// TODO YOU MUST IMPLEMENT THIS
 		
 		//temp
@@ -155,11 +146,11 @@ public class Parser {
 		
 		FieldNames f;
 		String content =new String("nа̀ра ('steam/vapour') and nара̀ ('cent/penny, money");
-				/*@Microbiological Research Corp\n" + 
+				@Microbiological Research Corp\n" + 
 				"said it entered into a letter of can't could've couldn't intent for a B-45 A-Biti55  A-Bitibfdn 55BBB-AA proposed business\n" + 
 				"combination with privately owned <DataGene Scientific\n" + 
 				"Laboratories Inc>, and <Milex Corp> a newly formed company,\n" + 
-				"through a stock swap.\n" );*/
+				"through a stock swap.\n" );
 		d.setField(FieldNames.FILEID,"1");
 		d.setField(FieldNames.CATEGORY,"acq");
 		d.setField(FieldNames.TITLE,"MICROBIO <MRC> PLANS ACQUISITION, FINANCING");
@@ -173,5 +164,5 @@ public class Parser {
 		return d;
 		//return null;
 	}
-
+*/
 }

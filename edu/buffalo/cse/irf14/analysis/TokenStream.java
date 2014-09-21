@@ -126,5 +126,27 @@ public class TokenStream implements Iterator<Token>{
 		else	
 			return mylist.get(index-1);*/
 	}
+	/**
+	 * Method to return the previous Token in the stream. If a previous
+	 * hasPrevious() call returned true, this method must return a non-null
+	 * Token.
+	 * If for any reason, it is called at the beginning of the stream, when none
+	 * of the tokens have been iterated, return null
+	 */
+	
+	public Token previous() {
+				if(index>0){
+						return mylist.get(--index);
+				}else{
+					return null;
+				}
+	}
+	//method to return the current index 
+	public int getIndex(){
+		return index;
+	}
+	public Token getTokenByIndex(int index){
+		return mylist.get(index);
+	}
 	
 }
