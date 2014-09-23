@@ -53,7 +53,6 @@ public class IndexWriter {
 			Tokenizer t = new Tokenizer();
 
 			for (FieldNames dir : FieldNames.values()) {
-				if (dir == FieldNames.CONTENT) {
 
 					System.out.println(dir + " = " + d.getField(dir)[0]);
 					TokenStream tstream = t.consume(d.getField(dir)[0]);
@@ -119,7 +118,7 @@ public class IndexWriter {
 
 					System.out
 							.println("------------------------------after datefilter-------------------------");
-					tstream.reset();
+					/*tstream.reset();
 					while (tstream.hasNext())
 						System.out.println("next is " + tstream.next());
 					
@@ -135,8 +134,8 @@ public class IndexWriter {
 					tstream.reset();
 					while(tstream.hasNext())
 						System.out.println("next is "+tstream.next());
-
-				}
+*/
+				
 
 			}
 
