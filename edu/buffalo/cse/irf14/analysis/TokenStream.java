@@ -206,6 +206,7 @@ public class TokenStream implements Iterator<Token> {
 		t.setTermText(ele);
 		switch(type){
 		case 1: {
+			//first month
 			if(index >1){
 				mylist.remove(--index);
 				mylist.remove(--index);
@@ -214,6 +215,7 @@ public class TokenStream implements Iterator<Token> {
 			break;
 		}
 		case 2 :{
+			//second month
 			if(index >0){
 				index++;
 				mylist.remove(--index);
@@ -224,6 +226,7 @@ public class TokenStream implements Iterator<Token> {
 			
 		}
 		case 3 :{
+			//AD-BC
 			if(index >0){
 				--index;
 				mylist.remove(--index);
@@ -232,6 +235,7 @@ public class TokenStream implements Iterator<Token> {
 			break;
 		}
 		case 4 :{
+			//only year and combined time and combined AD
 			if(index >0){
 				--index;
 				//mylist.remove(--index);
@@ -240,6 +244,7 @@ public class TokenStream implements Iterator<Token> {
 			break;
 		}
 		case 5 :{
+			//time
 			if(index >0){
 				mylist.remove(--index);
 				mylist.set( index, t );
