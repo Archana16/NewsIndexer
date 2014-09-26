@@ -154,7 +154,7 @@ public class Parser {
 		
 		
 		FieldNames f;
-		String content =new String(" this. pritikaMehta is a test. The city San Francisco is in California. Some bodily fluids, such as saliva and tears, do not transmit HIV. It runs Apple's iOS mobile operating system,");
+		String content =new String("The city $ San Francisco ~method() destructor is ~method() is in California. Some bodily fluids, such as saliva and tears, do not transmit HIV");
 				/*@Microbiological Research Corp\n" + 
 				"said it entered into a letter of can't could've couldn't intent for a B-45 A-Biti55  A-Bitibfdn 55BBB-AA proposed business\n" + 
 				"combination with privately owned <DataGene Scientific\n" + 

@@ -54,7 +54,7 @@ public class Runner {
 		IndexWriter writer = new IndexWriter();
 		
 		
-		try {
+	/*	try {
 			for (String cat : catDirectories) {
 				dir = new File(ipDir+ File.separator+ cat);
 				files = dir.list();
@@ -81,10 +81,10 @@ public class Runner {
 		}
 		
 		
+		*/
 		
 		
-		
-/*		PRITIKA's code
+//	PRITIKA's code
 		
 		try {
 			d = Parser.parse();
@@ -99,7 +99,7 @@ public class Runner {
 		} catch (ParserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} */
+		} 
 		
 		//IndexWriter writer = new IndexWriter(indexDir);
 		

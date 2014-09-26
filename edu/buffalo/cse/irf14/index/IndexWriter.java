@@ -58,7 +58,7 @@ public class IndexWriter {
 							TokenFilterFactory factory = TokenFilterFactory.getInstance();
 							
 							
-							TokenFilter filter = factory.getFilterByType(TokenFilterType.CAPITALIZATION, tstream);
+							/*TokenFilter filter = factory.getFilterByType(TokenFilterType.CAPITALIZATION, tstream);
 							tstream.reset();
 							while (tstream.hasNext()) {
 								filter.increment();
@@ -68,8 +68,18 @@ public class IndexWriter {
 							
 							System.out.println("------------------------------after capitalization-------------------------");
 							tstream.reset();
-							while(tstream.hasNext())
-								System.out.println("next is "+tstream.next());
+							*/
+							TokenFilter filter = factory.getFilterByType(TokenFilterType.SPECIALCHARS, tstream);
+							tstream.reset();
+							while (tstream.hasNext()) {
+								filter.increment();
+							}
+							
+							
+							System.out.println("------------------------------after SPECIALCHARS-------------------------");
+							tstream.reset();
+							//while(tstream.hasNext())
+								//System.out.println("next is "+tstream.next());
 							
 							
 							

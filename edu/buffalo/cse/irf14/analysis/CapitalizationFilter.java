@@ -1,5 +1,6 @@
 package edu.buffalo.cse.irf14.analysis;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,9 +19,17 @@ public class CapitalizationFilter extends TokenFilter {
 		Token token  = tStreamOld.next();
 		String word  = token.getTermText().trim();
 		String line = word;
-		
-		
+		Pattern pattern ;
+		Matcher matcher;
+		String rex;
 
+		//check for first word
+		if(!tStreamOld.hasPrevious()){
+			token.setTermText(word.toLowerCase());
+			return tStreamOld.hasNext();
+		}
+		
+		
 		//check if word is caps and whole sentence isnt caps
 		int wordn =0;
 		if(isUpperCase(word)){
@@ -37,11 +46,10 @@ public class CapitalizationFilter extends TokenFilter {
 					}
 				}else{
 					tStreamOld.resetPrevious();
-					break;
+					return tStreamOld.hasNext();
 				}
 			}
 		
-			System.out.println("line is "+line);
 			tStreamOld.setTempIndex();
 			while(tStreamOld.hasNext()){
 				
@@ -59,17 +67,13 @@ public class CapitalizationFilter extends TokenFilter {
 					}
 				}else{
 					tStreamOld.setIndexCurrent();
-					break;
+					return tStreamOld.hasNext();
 				}
 				
 			}
 			tStreamOld.getIndex();
 		
-		
-		System.out.println("line is "+line);
-				
 			if(isUpperCase(line) && wordn !=0){
-					System.out.println("entire line is "+line);
 					token.setTermText(word.toLowerCase());
 					tStreamOld.resetPrevious();
 					Pattern pattern1_inner = Pattern.compile("\\w[.]$");
@@ -113,26 +117,6 @@ public class CapitalizationFilter extends TokenFilter {
 		
 		//check for camelcase
 		String pat = "[A-Z]([A-Z0-9]*[a-z][a-z0-9]*[A-Z]|[a-z0-9]*[A-Z][A-Z0-9]*[a-z])[A-Za-z0-9]*";
-		Pattern pattern = Pattern.compile(pat);
-		Matcher matcher = pattern.matcher(word);
-		while(matcher.find()){
-			int wordNumber = 0;
-			while(tStreamOld.hasPrevious()) {
-				String previous = tStreamOld.previous().getTermText().trim();
-				Pattern pattern1 = Pattern.compile("\\w[.]$");
-				Matcher matcher1 = pattern1.matcher(previous);
-				if(matcher1.find() && wordNumber ==0){
-					token.setTermText(word.toLowerCase());
-					break;
-				}else{
-					wordNumber++;
-				}	
-			}
-			tStreamOld.resetPrevious();
-		}
-		
-		//check for san fransico
-		pat = "[A-Z]([A-Z0-9]*[a-z][a-z0-9]*[A-Z]|[a-z0-9]*[A-Z][A-Z0-9]*[a-z])[A-Za-z0-9]*";
 		pattern = Pattern.compile(pat);
 		matcher = pattern.matcher(word);
 		while(matcher.find()){
@@ -151,7 +135,50 @@ public class CapitalizationFilter extends TokenFilter {
 			tStreamOld.resetPrevious();
 		}
 		
+		//check for san fransico
+		rex = "^[A-Z][a-z]+";
+		pattern = Pattern.compile(rex);
+		matcher = pattern.matcher(word);
+		Pattern pattern1 = Pattern.compile("\\w[.]$");
+		Matcher matcher1 = pattern1.matcher(word);
+		Matcher matcher_p;
 		
+			
+		while(matcher.find() && !matcher1.find()){
+			ArrayList<Token> tokensToMerge = new ArrayList<Token>();
+			int i =0;
+			int wordNumber = 0;
+			 if(tStreamOld.hasPrevious()){
+					String prev = tStreamOld.previous().getTermText().trim(); // dont remove it 
+					String prev1 = tStreamOld.previous().getTermText().trim(); // dont removeit 
+					Matcher m_inn = pattern1.matcher(prev1);
+					if(m_inn.find()){
+						token.setTermText(word.toLowerCase());
+					}
+			
+			 }
+			while(tStreamOld.hasNext()) {
+				Token tokenAdd = tStreamOld.next();
+				String next = tokenAdd.getTermText().trim();
+				matcher = pattern.matcher(next);
+				matcher1 = pattern1.matcher(next);
+				if(matcher.find()){
+					tokensToMerge.add(tokenAdd);
+					tStreamOld.remove();
+					wordNumber++;
+					if(matcher1.find())
+						break;
+				}else{
+					break;
+				}	
+			}
+			if(wordNumber >0){
+				Token[] tokenArr = new Token[tokensToMerge.size()];
+				tokenArr = tokensToMerge.toArray(tokenArr);
+				token.merge(tokenArr);
+			}
+			
+		}
 		
 		
 		return tStreamOld.hasNext();

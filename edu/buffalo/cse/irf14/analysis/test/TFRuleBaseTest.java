@@ -17,6 +17,8 @@ public class TFRuleBaseTest {
 		TokenFilterFactory factory = TokenFilterFactory.getInstance();
 		TokenFilter filter = factory.getFilterByType(type, tstream);
 		
+		
+		System.out.println("got string "+str);
 		while (filter.increment()) {
 			//Do nothing :/
 		}
@@ -33,7 +35,7 @@ public class TFRuleBaseTest {
 
 			if (t != null) {
 				s = t.toString();
-				
+				System.out.println("i got word back ="+s);
 				if (s!= null && !s.isEmpty()){
 					list.add(s);	
 					
