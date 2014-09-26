@@ -49,6 +49,9 @@ public class TokenFilterFactory {
 		}else if(type == TokenFilterType.ACCENT){
 			tf = new AccentFilter(stream);
 			return tf;
+		}else if(type == TokenFilterType.DATE){
+			tf = new DateFilter(stream);
+			return tf;
 		}else if(type == TokenFilterType.CAPITALIZATION){
 			tf = new CapitalizationFilter(stream);
 			return tf;

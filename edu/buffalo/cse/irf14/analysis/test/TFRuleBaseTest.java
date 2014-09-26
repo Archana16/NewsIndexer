@@ -22,7 +22,6 @@ public class TFRuleBaseTest {
 		while (filter.increment()) {
 			//Do nothing :/
 		}
-		
 		tstream = filter.getStream();
 		tstream.reset();
 		
