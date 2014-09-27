@@ -55,7 +55,6 @@ public class IndexWriter {
 			AnalyzerFactory AnalyzerInstance = AnalyzerFactory.getInstance();
 
 			for (FieldNames dir : FieldNames.values()) {
-
 					System.out.println(dir + " = " + d.getField(dir)[0]);
 					TokenStream tstream = t.consume(d.getField(dir)[0]);
 					//Analyzer obj = (Analyzer)AnalyzerInstance.getAnalyzerForField(dir, tstream);
@@ -144,7 +143,6 @@ public class IndexWriter {
 					while (tstream.hasNext()) {
 						filter.increment();
 					}
-
 					System.out.println("------------------------------after numeric filter-------------------------");
 					while(tstream.hasNext())
 						System.out.println("next is "+tstream.next());

@@ -66,7 +66,11 @@ public class Token {
 	 * @param tokens The token array to be merged
 	 */
 	protected void merge(Token...tokens) {
-		//TODO : YOU MUST IMPLEMENT THIS METHOD
+		String words = getTermText();
+		for(Token t:tokens){
+			words = words+" "+t.getTermText();
+		}
+		setTermText(words);
 	}
 	
 	/**

@@ -59,6 +59,9 @@ public class TokenFilterFactory {
 		else if(type == TokenFilterType.NUMERIC){
 			tf = new NumericFilter(stream);
 			return tf;
+		}else if(type == TokenFilterType.SPECIALCHARS){
+			tf = new SpecialCharFilter(stream);
+			return tf;
 		}else
 			return null;
 	}

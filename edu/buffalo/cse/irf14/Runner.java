@@ -64,7 +64,7 @@ public class Runner {
 		Document d = null;
 		IndexWriter writer = new IndexWriter();
 		
-		//comment out this for whole document
+		//uncomment out this for one file
 /*		try{
 			try {
 				d = Parser.parse("/home/archana/workspace-ir/IR/training/dfl/0007273");
@@ -85,8 +85,7 @@ public class Runner {
 			e.printStackTrace();
 		}*/
 		
-		
-		// uncomment out this for whole document
+		//uncomment this for whole directory
 		try {
 			for (String cat : catDirectories) {
 				dir = new File(ipDir+ File.separator+ cat);
@@ -114,15 +113,10 @@ public class Runner {
 		} catch (IndexerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}	
+//	PRITIKA's code
 		
-		
-		
-		
-		
-/*		PRITIKA's code
-		
-		try {
+	/*	try {
 			d = Parser.parse();
 			System.out.println("hey i got the doc with name = "+d.getField(FieldNames.CONTENT)[0]);
 			try{
@@ -137,34 +131,6 @@ public class Runner {
 			e.printStackTrace();
 		} */
 		
-		//IndexWriter writer = new IndexWriter(indexDir);
-		
-//		try {
-//			for (String cat : catDirectories) {
-//				dir = new File(ipDir+ File.separator+ cat);
-//				files = dir.list();
-//				
-//				if (files == null)
-//					continue;
-//				
-//				for (String f : files) {
-//					try {
-//						d = Parser.parse(dir.getAbsolutePath() + File.separator +f);
-//						writer.addDocument(d);
-//					} catch (ParserException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					} 
-//					
-//				}
-//				
-//			}
-//			
-//			writer.close();
-//		} catch (IndexerException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 	}
 
 }
