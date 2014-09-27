@@ -9,6 +9,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import edu.buffalo.cse.irf14.analysis.AnalyzerFactory;
 import edu.buffalo.cse.irf14.analysis.Token;
 import edu.buffalo.cse.irf14.analysis.TokenFilter;
 import edu.buffalo.cse.irf14.analysis.TokenFilterFactory;
@@ -51,11 +52,13 @@ public class IndexWriter {
 
 		try {
 			Tokenizer t = new Tokenizer();
+			AnalyzerFactory AnalyzerInstance = AnalyzerFactory.getInstance();
 
 			for (FieldNames dir : FieldNames.values()) {
 
 					System.out.println(dir + " = " + d.getField(dir)[0]);
 					TokenStream tstream = t.consume(d.getField(dir)[0]);
+					//Analyzer obj = (Analyzer)AnalyzerInstance.getAnalyzerForField(dir, tstream);
 					TokenFilterFactory factory = TokenFilterFactory
 							.getInstance();
 					TokenFilter filter;
@@ -134,9 +137,17 @@ public class IndexWriter {
 					tstream.reset();
 					while(tstream.hasNext())
 						System.out.println("next is "+tstream.next());
-*/
-				
+					*/
+					filter = factory.getFilterByType(TokenFilterType.NUMERIC,
+							tstream);
+					tstream.reset();
+					while (tstream.hasNext()) {
+						filter.increment();
+					}
 
+					System.out.println("------------------------------after numeric filter-------------------------");
+					while(tstream.hasNext())
+						System.out.println("next is "+tstream.next());
 			}
 
 		} catch (Exception e) {

@@ -55,6 +55,10 @@ public class TokenFilterFactory {
 		}else if(type == TokenFilterType.CAPITALIZATION){
 			tf = new CapitalizationFilter(stream);
 			return tf;
+		}
+		else if(type == TokenFilterType.NUMERIC){
+			tf = new NumericFilter(stream);
+			return tf;
 		}else
 			return null;
 	}

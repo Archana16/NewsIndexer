@@ -33,25 +33,48 @@ public class Runner {
 		/*String ipDir = args[0];
 		String indexDir = args[1];
 		//more? idk! 
-		
-		String ipDir = "/home/archana/workspace-ir/IR/news_training/training";
-		String indexDir = "dfl";
+		*/
+		String ipDir = "/home/archana/workspace-ir/IR/training";
+		//String indexDir = "dfl";
+		String[] files;
+		File dir;
 		File ipDirectory = new File(ipDir);
 		String[] catDirectories = ipDirectory.list();
-		
-		String[] files;
-		File dir;*/
-		
+		/*int i =0,j=0;
+		for(String cat :catDirectories)
+			{
+			dir = new File(ipDir+ File.separator+ cat);
+			files = dir.list();
+			
+			if (files == null)
+				continue;
+			System.out.println(ipDir+ File.separator+ cat);
+			i++;
+			dir = new File(ipDir+ File.separator+ cat);
+			files = dir.list();
+			for(String f :files)
+			{
+			System.out.println(f);
+			j++;
+			}
+			System.out.println(j);
+			}
+		System.out.println(i);*/
 		
 		Document d = null;
 		IndexWriter writer = new IndexWriter();
 		
 		//comment out this for whole document
-		try{
+/*		try{
 			try {
-				d = Parser.parse( "/home/archana/workspace-ir/IR/news_training/training/dfl/0007273");
+				d = Parser.parse("/home/archana/workspace-ir/IR/training/dfl/0007273");
 				System.out.println(d.getField(FieldNames.FILEID)[0]);
-				writer.addDocument(d);
+				System.out.println(d.getField(FieldNames.CATEGORY)[0]);
+				System.out.println(d.getField(FieldNames.PLACE)[0]);
+				System.out.println(d.getField(FieldNames.AUTHOR)[0]);
+				System.out.println(d.getField(FieldNames.AUTHORORG)[0]);
+				System.out.println(d.getField(FieldNames.NEWSDATE)[0]);
+				//writer.addDocument(d);
 			} catch (Exception e) {//ParserException
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -60,11 +83,11 @@ public class Runner {
 		}catch(Exception e){
 			
 			e.printStackTrace();
-		}
+		}*/
 		
 		
 		// uncomment out this for whole document
-		/*try {
+		try {
 			for (String cat : catDirectories) {
 				dir = new File(ipDir+ File.separator+ cat);
 				files = dir.list();
@@ -75,8 +98,8 @@ public class Runner {
 				for (String f : files) {
 					try {
 						d = Parser.parse(dir.getAbsolutePath() + File.separator +f);
-						System.out.println(d.getField(FieldNames.FILEID)[0]);
-						writer.addDocument(d);
+						System.out.println("back from"+dir.getAbsolutePath() + File.separator +f);
+						//writer.addDocument(d);
 					} catch (ParserException e) {//ParserException
 						// TODO Auto-generated catch block
 						e.getMessage();
@@ -84,12 +107,14 @@ public class Runner {
 					
 				}
 				
+				
 			}
+			System.out.println("DONE!!!!");
 			writer.close();
 		} catch (IndexerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 		
 		
 		

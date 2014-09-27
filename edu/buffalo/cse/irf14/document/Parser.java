@@ -21,6 +21,10 @@ public class Parser {
 	 */
 
 	private static Document d;
+	private static ArrayList<String> list = new ArrayList<String>(
+			Arrays.asList("january", "jan", "febuary", "feb", "march", "april",
+					"may", "june", "july", "august", "aug", "september", "sep",
+					"october", "oct", "november", "nov", "december", "dec"));
 
 	public static boolean testAllUpperCase(String str) {
 		for (int i = 0; i < str.length(); i++) {
@@ -33,17 +37,37 @@ public class Parser {
 		return true;
 	}
 
+	public static String checkDate(String str) {
+		String[] words = str.split(" ");
+		String date = "";
+		for (int i = 0; i < words.length; i++) {
+			if (list.contains(words[i].toLowerCase())) {
+				date = words[i];
+				if(i < words.length){
+					if (words[i + 1].matches("^\\d{1,2},?$") ||words[i + 1].matches("^\\d{4},?$"))
+						date += " " + words[i + 1];
+					
+				}
+				if(i >0){
+					if (words[i -1].matches("^\\d{1,2},?$") ||words[i -1].matches("^\\d{4},?$"))
+						date = words[i -1]+" "+date;
+				}
+				if (date.contains(","))
+					date = date.split(",")[0];
+				return date;
+			}
+		}
+		return null;
+	}
+
 	public static void contentParse(String content) {
 		Scanner words = new Scanner(content);
 		String Place = "";
 		String Author = "";
 		String Date = "";
 		String AuthorOrg = "";
-		ArrayList<String> list = new ArrayList<String>(Arrays.asList("january",
-				"jan", "febuary", "feb", "march", "april", "may", "june",
-				"july", "august", "aug", "september", "sep", "october", "oct",
-				"november", "nov", "december", "dec"));
-		
+		if(Date.isEmpty())
+			Date= checkDate(content);
 		while (words.hasNext()) {
 			String token = words.next();
 			if (testAllUpperCase(token)) {
@@ -56,35 +80,34 @@ public class Parser {
 							break;
 						} else {
 							Author += " " + token;
-							token = words.hasNext()?words.next():"";
+							token = words.hasNext() ? words.next() : "";
 						}
 					}
 					String[] parts = Author.split(",");
-					if(parts.length>1){
+					if (parts.length > 1) {
 						Author = parts[0];
-						AuthorOrg =parts[1];
-						
+						AuthorOrg = parts[1];
+
 					}
-						
-					
-				} else if (Place.isEmpty()) {
-					Place = token;
-					String place1= words.next();
-					while(!list.contains(place1.toLowerCase())){
-						Place +=" "+place1;
-						place1 = words.hasNext()?words.next():"";
+
+				} else{
+					if(Place.isEmpty()){
+						if (token.charAt(token.length() - 1) == ',') 
+							Place = token;
+						else{
+							Place = token;
+							String place1 ="";
+							while (words.hasNext()) {
+								place1 = words.next();
+								if (place1.matches("^\\w+,$") && !Place.isEmpty())
+									break;
+								else
+									Place += " " + place1;
+								}
+							}
+						}
 					}
-					if (list.contains(place1.toLowerCase()) && Date.isEmpty()) {
-						Date = place1;
-						String day = words.hasNext()?words.next():"";
-						if (day!="" && day.contains(","))
-							day=day.split(",")[0];
-						Date += " " + day;
-					}
-									
 				}
-			}
-		
 		}
 		d.setField(FieldNames.PLACE, Place);
 		d.setField(FieldNames.AUTHOR, Author);
@@ -94,44 +117,47 @@ public class Parser {
 	}
 
 	public static Document parse(String filename) throws ParserException {
-		
-		//System.out.println(filename);
-		
-		if(filename == null || filename == ""){
-            throw new ParserException("Filename is empty");
-        }
-		if(!filename.matches("((/[a-zA-Z0-9_.-]+))+")){
-            throw new ParserException("Invalid input file "+filename);
-        }
-		// TODO YOU MUST IMPLEMENT THIS
 
-		try {
-			d = new Document();
-			int index = filename.lastIndexOf("/");
-			d.setField(FieldNames.FILEID, filename.substring(index + 1));
-			d.setField(FieldNames.CATEGORY, filename.substring(filename.substring(0, index).lastIndexOf("/") + 1, index));
-			File file = new File(filename);
-			FileReader reader = new FileReader(file);
-			BufferedReader in = new BufferedReader(reader);
-			String string = "";String Content = "";String Title = "";
-			while ((string = in.readLine()) != null) {
-				if (string.isEmpty())
-					continue;
-				if (testAllUpperCase(string)) {
-					if (Title.isEmpty())
-						Title = string;
-				} else {
-					Content += string;
-				}
-			}
-			d.setField(FieldNames.TITLE, Title);
-			d.setField(FieldNames.CONTENT, Content);
-			contentParse(Content);
-			in.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		// System.out.println(filename);
+
+		if (filename == null || filename == "") {
+			throw new ParserException("Filename is empty");
 		}
-		return d;
+		if (!filename.matches("((/[a-zA-Z0-9_.-]+))+")) {
+			throw new ParserException("Invalid input file " + filename);
+		}
+		// TODO YOU MUST IMPLEMENT THIS
+		else {
+			try {
+				d = new Document();
+				int index = filename.lastIndexOf("/");
+				d.setField(FieldNames.FILEID, filename.substring(index + 1));
+				d.setField(FieldNames.CATEGORY, filename.substring(filename
+						.substring(0, index).lastIndexOf("/") + 1, index));
+				File file = new File(filename);
+				FileReader reader = new FileReader(file);
+				BufferedReader in = new BufferedReader(reader);
+				String string = "";
+				String Content = "";
+				String Title = "";
+				while ((string = in.readLine()) != null) {
+					// System.out.println(string);
+					if (!string.isEmpty() && testAllUpperCase(string)) {
+						if (Title.isEmpty())
+							Title = string;
+					} else {
+						Content += string;
+					}
+				}
+				d.setField(FieldNames.TITLE, Title);
+				d.setField(FieldNames.CONTENT, Content);
+				contentParse(Content);
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return d;
+		}
 	}
 
 }
