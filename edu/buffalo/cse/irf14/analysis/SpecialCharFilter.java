@@ -14,6 +14,7 @@ public class SpecialCharFilter extends TokenFilter {
 	public boolean increment() throws TokenizerException {
 		// TODO Auto-generated method stub
 		//System.out.println("Special Character filter function increment");
+		
 		Token token  = tStreamOld.next();
 		String word  = token.getTermText().trim();
 		

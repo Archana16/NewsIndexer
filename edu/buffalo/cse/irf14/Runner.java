@@ -93,7 +93,7 @@ public class Runner {
 		
 		
 		//uncomment out this for one file
-		/*try{
+		try{
 			try {
 				d = Parser.parse("/home/archana/workspace-ir/IR/training/dfl/0007273");
 				System.out.println(d.getField(FieldNames.FILEID)[0]);
@@ -102,7 +102,7 @@ public class Runner {
 				System.out.println(d.getField(FieldNames.AUTHOR)[0]);
 				System.out.println(d.getField(FieldNames.AUTHORORG)[0]);
 				System.out.println(d.getField(FieldNames.NEWSDATE)[0]);
-				writer.addDocument(d);
+				//writer.addDocument(d);
 			} catch (Exception e) {//ParserException
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -111,10 +111,10 @@ public class Runner {
 		}catch(Exception e){
 			
 			e.printStackTrace();
-		}*/
+		}
 		
 		//uncomment this for whole directory
-		 i=0;
+/*		 i=0;
 		try{
 			for (String cat : catDirectories) {
 				dir = new File(ipDir+ File.separator+ cat);
@@ -133,7 +133,7 @@ public class Runner {
 							i++;
 							
 							//System.out.println("\t"+j++ + "parsed ="+dir.getAbsolutePath() + File.separator +f);
-							writer.addDocument(d);
+							//writer.addDocument(d);
 							
 							//System.out.println(d.getField(FieldNames.FILEID)[0]+" and "+d.getField(FieldNames.CATEGORY)[0]);
 						}catch (Exception e) {//ParserException
@@ -148,29 +148,29 @@ public class Runner {
 				
 			}
 	
-			/*TreeMap <Integer,Postings>docMap = IndexWriter.getIndex(IndexType.TERM);
+			TreeMap <Integer,Postings>docMap = IndexWriter.getIndex(IndexType.TERM);
 			for (Entry<Integer,Postings> entry : docMap.entrySet()) {
 				 	System.out.println(i++ +"  key was "+entry.getKey());
-				    //entry.getValue().printDocmap();*/
+				    //entry.getValue().printDocmap();
 			//	}
 			i =0;
 			TreeMap <String,Integer>termMap = writer.getTermMap();
 		try{	
 			PrintWriter writer_1 = new PrintWriter("/home/pritika/Downloads/sp.txt");
-			/*TreeMap <Integer,Postings>docMap = IndexWriter.getIndex(IndexType.TERM);
+			TreeMap <Integer,Postings>docMap = IndexWriter.getIndex(IndexType.TERM);
 			for (Entry<Integer,Postings> entry : docMap.entrySet()) {
 				 	System.out.println(i++ +"  key was "+entry.getKey());
 				    entry.getValue().printDocmap();
 				}
-			*/
+			
 			int x=0;
-			/*for (Entry<String,Integer> entry : termMap.entrySet()) {
+			for (Entry<String,Integer> entry : termMap.entrySet()) {
 			 	System.out.println(i++ +"  key was "+entry.getKey());
 			 	writer_1.println(x++ +" "+entry.getKey());
 			    //entry.getValue().printDocmap();
 			 	//if(x>1000)
 			 		//break;
-			}*/
+			}
 			System.out.println("--------------------no of terms="+writer.getTermNo());
 			writer.close();
 		}catch(FileNotFoundException e){
@@ -182,7 +182,8 @@ public class Runner {
 		}catch(IndexerException e){
 			 
 			}
-		}
+		}*/
 	}
+}
 
 
