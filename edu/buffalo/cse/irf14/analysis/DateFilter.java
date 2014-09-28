@@ -17,7 +17,7 @@ public class DateFilter extends TokenFilter {
 	public boolean increment() throws TokenizerException {
 		// TODO Auto-generated method stub
 
-		System.out.println("date filter function increment");
+		//System.out.println("date filter function increment");
 		ArrayList<String> list = new ArrayList<String>(Arrays.asList("january",
 				"jan", "febuary", "feb", "march", "april", "may", "june",
 				"july", "august", "aug", "september", "sep", "october", "oct",
@@ -36,8 +36,8 @@ public class DateFilter extends TokenFilter {
 			prev = (tStreamOld.hasTokenbyIndex(tStreamOld.getIndex() - 2)) ? tStreamOld
 					.getTokenByIndex((tStreamOld.getIndex() - 2)).getTermText()
 					: "";
-			System.out.println("before: " + cur + " " + next1 + " " + next2
-					+ " " + prev);
+			//System.out.println("before: " + cur + " " + next1 + " " + next2
+				//	+ " " + prev);
 			if (list.contains(cur.toLowerCase())) {
 				month = cur;
 				if (prev.matches("^\\d{1,2},?$")) {
@@ -59,7 +59,7 @@ public class DateFilter extends TokenFilter {
 				}
 				// System.out.println("Before date:" + month + " " + year + " "
 				// + date);
-				System.out.println(convertDate(year, month, date));
+				//System.out.println(convertDate(year, month, date));
 				if (flag) {
 					if (comma) {
 						if (year == "1900")
@@ -188,8 +188,8 @@ public class DateFilter extends TokenFilter {
 					tStreamOld.replaceTokens(3,
 							convertBC_AD(year, month, date, "AD"));
 				// System.out.println(convertBC_AD(year, month, date, "AD"));
-				System.out.println("after: " + cur + " " + next1 + " " + next2
-						+ " " + prev);
+				//System.out.println("after: " + cur + " " + next1 + " " + next2
+						//+ " " + prev);
 			} else if (cur.matches("^\\d{1,4}((BC)|(AD))[.,]$")) {
 				if (cur.charAt(cur.length() - 1) == '.'
 						|| cur.charAt(cur.length() - 1) == ',') {

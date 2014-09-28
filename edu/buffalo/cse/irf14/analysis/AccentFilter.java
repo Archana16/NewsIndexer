@@ -25,7 +25,7 @@ public class AccentFilter extends TokenFilter {
 		 Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
 		 new_word = pattern.matcher(nfdNormalizedString).replaceAll("");
 		//new_word = Normalizer.normalize(word, Normalizer.Form.NFD);
-		System.out.println("old word was "+word+" new word is "+new_word);
+		//System.out.println("old word was "+word+" new word is "+new_word);
 		if(new_word.isEmpty())
 			tStreamOld.remove();
 		else
