@@ -60,7 +60,8 @@ public class AnalyzerFactory {
 		// TODO : YOU NEED TO IMPLEMENT THIS METHOD
 		Analyzer analyzer = null;
 		switch (name) {
-		case AUTHOR: {
+		case AUTHOR :
+		case AUTHORORG :{
 			analyzer = new AuthorAnalyzer(stream);
 			break;
 		}
@@ -68,8 +69,12 @@ public class AnalyzerFactory {
 			analyzer = new PlaceAnalyzer(stream);
 			break;
 		}
-		case CONTENT: {
-			analyzer = new ContentAnalyzer(stream);
+		case CATEGORY: {
+			analyzer = new CategoryAnalyzer(stream);
+			break;
+		}
+		case NEWSDATE: {
+			analyzer = new DateAnalyzer(stream);
 			break;
 		}
 		default: {

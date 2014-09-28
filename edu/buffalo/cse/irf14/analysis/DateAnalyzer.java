@@ -3,12 +3,12 @@ package edu.buffalo.cse.irf14.analysis;
 import java.util.Arrays;
 import java.util.ArrayList;
 
-public class TermAnalyzer implements Analyzer {
+public class DateAnalyzer implements Analyzer {
 	TokenStream tStreamOld;
 	TokenFilterFactory factory = TokenFilterFactory.getInstance();
 	TokenFilter filter = null;
 
-	public TermAnalyzer(TokenStream stream) {
+	public DateAnalyzer(TokenStream stream) {
 		tStreamOld = stream;
 		// TODO Auto-generated constructor stub
 	}
@@ -16,11 +16,7 @@ public class TermAnalyzer implements Analyzer {
 	@Override
 	public boolean increment() throws TokenizerException {
 		ArrayList<TokenFilterType> term = new ArrayList<TokenFilterType>(
-				Arrays.asList(TokenFilterType.ACCENT,
-						TokenFilterType.CAPITALIZATION,TokenFilterType.DATE,
-						TokenFilterType.NUMERIC, TokenFilterType.SYMBOL,
-						TokenFilterType.SPECIALCHARS, TokenFilterType.STOPWORD,
-						TokenFilterType.STEMMER));
+				Arrays.asList(TokenFilterType.DATE));
 		for (TokenFilterType tf : term) {
 			filter = factory.getFilterByType(tf, tStreamOld);
 			while (filter.increment()) {

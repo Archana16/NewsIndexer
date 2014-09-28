@@ -54,9 +54,9 @@ public class Runner {
 	    long endTime = 0;
 	    System.out.println( "starttime = "+startTime);
 		
-	    String ipDir = "/home/pritika/Downloads/news_training/training";
-	    //String ipDir = "/home/archana/workspace-ir/IR/training";
-		String indexDir = "/home/pritika/Downloads/dfl";
+	    //String ipDir = "/home/pritika/Downloads/news_training/training";
+	    String ipDir = "/home/archana/workspace-ir/IR/training";
+		String indexDir = "/home/archana/Downloads/dfl";
 		IndexWriter writer = new IndexWriter(indexDir);
 		Document d = null;
 		//IndexWriter writer = new IndexWriter(indexDir);

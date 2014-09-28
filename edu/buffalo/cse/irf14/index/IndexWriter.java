@@ -105,8 +105,6 @@ public class IndexWriter implements java.io.Serializable {
 					CommonIndex = TermIndex;
 				}
 				
-				
-				
 				TokenStream stream = tknizer.consume(d.getField(dir)[0]);
 				Analyzer analyzer = fact.getAnalyzerForField(dir, stream);
 				while (analyzer.increment()) {
@@ -118,7 +116,7 @@ public class IndexWriter implements java.io.Serializable {
 						//System.out.println("word = "+term);
 						if(!termMap.containsKey(term)){
 							termMap.put(term,termId++);
-							System.out.println(id++ +" word = "+term);
+							//System.out.println(id++ +" word = "+term);
 						}else{
 							//System.out.println("already had = "+term+" at= "+termMap.get(term));
 						}	
@@ -237,7 +235,7 @@ public class IndexWriter implements java.io.Serializable {
 			out.close();
 			fileOut.close();
 			
-			System.out.printf("Serialized data is saved ");
+			//System.out.printf("Serialized data is saved ");
 		}catch(IOException e){
 			System.out.println("i have exception in close "+e);
 		}

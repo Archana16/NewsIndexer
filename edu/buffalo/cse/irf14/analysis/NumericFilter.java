@@ -9,7 +9,7 @@ public class NumericFilter extends TokenFilter {
 
 	@Override
 	public boolean increment() throws TokenizerException {
-		System.out.println("Numeric filter function increment");
+		//System.out.println("Numeric filter function increment");
 		while (tStreamOld.hasNext()) {
 			String word = tStreamOld.next().getTermText();
 			String temp = "";
