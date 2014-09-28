@@ -17,7 +17,7 @@ public class AuthorAnalyzer implements Analyzer {
 	@Override
 	public boolean increment() throws TokenizerException{
 		ArrayList<TokenFilterType> term = new ArrayList<TokenFilterType>(
-				Arrays.asList(TokenFilterType.DATE, TokenFilterType.NUMERIC));
+				Arrays.asList(TokenFilterType.NUMERIC));
 		for(TokenFilterType tf : term){
 			filter = factory.getFilterByType(tf, tStreamOld);
 			while (filter.increment()) {
@@ -25,7 +25,7 @@ public class AuthorAnalyzer implements Analyzer {
 			}
 			tStreamOld.reset();
 		}
-		System.out.println("---After all filters for Author---");
+		//System.out.println("---After all filters for Author---");
 		return false;
 	}
 	@Override

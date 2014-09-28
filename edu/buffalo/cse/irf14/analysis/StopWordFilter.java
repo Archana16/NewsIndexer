@@ -16,12 +16,14 @@ public class StopWordFilter extends TokenFilter {
 		// TODO Auto-generated method stub
 		// TODO Auto-generated method stub
 		//System.out.println("Stop word filter function increment");
+		if(tStreamOld.hasNext()){
 				String word  = tStreamOld.next().getTermText().trim();
 				
 				if(Arrays.asList(stopWordsList).contains(word)){
 					tStreamOld.remove();
 					
 				}
+		}		
 				return tStreamOld.hasNext();
 		
 	}

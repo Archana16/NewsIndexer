@@ -94,6 +94,7 @@ public class IndexReader {
 	 */
 	public int getTotalKeyTerms() {
 		//TODO : YOU MUST IMPLEMENT THIS
+		System.out.println("--------------------------total key terms="+map.size());
 		return map.size();
 	}
 	
@@ -118,6 +119,7 @@ public class IndexReader {
 	 */
 	public Map<String, Integer> getPostings(String term) {
 		String query = getAnalyzedTerm(term);
+		System.out.println("query is "+query);
 		if(termMap.containsKey(query)){
 			Postings p = map.get(termMap.get(term));
 			Map<String,Integer> postingMap = p.getDocMap();
