@@ -76,7 +76,6 @@ public class SymbolFilter extends TokenFilter {
 				token.setTermText(new_word);
 					
 			//System.out.println(word+"  "+new_word);
-					
 		}
 		return tStreamOld.hasNext();
 	}

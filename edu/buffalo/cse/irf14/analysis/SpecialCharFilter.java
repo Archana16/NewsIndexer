@@ -20,25 +20,31 @@ public class SpecialCharFilter extends TokenFilter {
 		String pat = "^([^A-Za-z0-9]+)$";
 		Pattern pattern = Pattern.compile(pat);
 		Matcher matcher = pattern.matcher(word);
-		
 		//System.out.println("initially word was "+word);
-		
+
 		while(matcher.find()) {
 			tStreamOld.remove();
 			return tStreamOld.hasNext();
 		}
 		
-		String new_word = word.replaceAll("^([^A-Za-z0-9-]+)|([^A-Za-z0-9]+)$", "");
-		if(new_word.equals(word)){
-			//System.out.println("dude they are equal new="+new_word+" old ="+word);
+		String new_word = word.replaceAll("^([^A-Za-z0-9-]+)|([^A-Za-z0-9-]+)$", "");
+		pat = "([^0-9][+-,])";
+		pattern = Pattern.compile(pat);
+		matcher = pattern.matcher(new_word);
+		while(matcher.find()) {
+			new_word = word.replaceAll("[+-,]", "");
+			
 		}
-		String oldWord = word;
-		/*while(!new_word.equals(oldWord))
-		{
-			oldWord = new_word;
-			new_word = new_word.replaceAll("^([^A-Za-z0-9])|([^A-Za-z0-9])$", "");
-			System.out.println("new word is "+new_word);
-		}*/	
+		
+		pat = "([A-Za-z.]+)([^A-Za-z])([A-Za-z.]+)";
+		pattern = Pattern.compile(pat);
+		matcher = pattern.matcher(new_word);
+		
+		while(matcher.find()) {
+			new_word = matcher.group(1)+matcher.group(3);
+		}
+		
+		new_word = new_word.replaceAll("[\\^*&\\+]", "");
 		token.setTermText(new_word);
 	
 		return tStreamOld.hasNext();

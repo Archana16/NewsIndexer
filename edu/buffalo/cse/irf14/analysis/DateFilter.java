@@ -17,7 +17,7 @@ public class DateFilter extends TokenFilter {
 	public boolean increment() throws TokenizerException {
 		// TODO Auto-generated method stub
 
-		System.out.println("date filter function increment");
+		//System.out.println("date filter function increment");
 		ArrayList<String> list = new ArrayList<String>(Arrays.asList("january",
 				"jan", "febuary", "feb", "march", "april", "may", "june",
 				"july", "august", "aug", "september", "sep", "october", "oct",
@@ -53,7 +53,6 @@ public class DateFilter extends TokenFilter {
 					year = next1.replace(",", "");
 					year = year.replace(".", "");
 				}
-
 				if (next2.matches("^\\d{4}[.,]?$")) {
 					year = next2.replace(",", "");
 					year = year.replace(".", "");
@@ -61,6 +60,7 @@ public class DateFilter extends TokenFilter {
 				// System.out.println("after date:" + month + " " + year + " "+
 				// date);
 				/* System.out.println(convertDate(year, month, date)); */
+
 				if (flag) {
 					if ((next1.charAt(next1.length() - 1) == ',' || next1
 							.charAt(next1.length() - 1) == '.')
