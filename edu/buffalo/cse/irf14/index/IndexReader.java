@@ -94,6 +94,7 @@ public class IndexReader {
 	 */
 	public int getTotalKeyTerms() {
 		//TODO : YOU MUST IMPLEMENT THIS
+		System.out.println("--------------------------total key terms="+map.size());
 		return map.size();
 	}
 	

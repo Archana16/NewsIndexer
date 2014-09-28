@@ -106,7 +106,20 @@ public class IndexWriter implements java.io.Serializable {
 					CommonIndex = TermIndex;
 				}
 				
-				TokenStream stream = tknizer.consume(d.getField(dir)[0]);
+				//System.out.println("field for doc is "+d.getField(dir)[0]+" and dir is "+dir);
+				if(dir == FieldNames.FILEID){
+					//System.out.println("yes it is field id");
+					continue;
+					
+				}
+				//System.out.println("after continue  "+dir+" and val is "+d.getField(dir) );
+				if(d.getField(dir) == null){
+					//System.out.println("dude it is null for "+dir+" continuing");
+					continue;
+				}TokenStream stream = tknizer.consume(d.getField(dir)[0]);
+				//System.out.println("stream is "+stream);
+				if(stream.hasNext()){
+					//System.out.println("yeh it has next");
 				Analyzer analyzer = fact.getAnalyzerForField(dir, stream);
 				while (analyzer.increment()) {
 					
@@ -124,7 +137,7 @@ public class IndexWriter implements java.io.Serializable {
 						addDocumentToIndex(CommonIndex,termMap.get(term),d.getField(FieldNames.FILEID)[0]);
 					}	
 				}
-				
+			}
 			catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

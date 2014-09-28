@@ -12,21 +12,23 @@ public class StemmingFilter extends TokenFilter {
 		// TODO Auto-generated method stub
 		//System.out.println("i am in stemmer");
 		//System.out.println("Stemmer filter function increment");
-		Token token  = tStreamOld.next();
-		String word  = token.getTermText().trim();
-		
-		if(word.matches("[A-Za-z]+")){
+		if(tStreamOld.hasNext()){
+			Token token  = tStreamOld.next();
+			String word  = token.getTermText().trim();
 			
-			char[] w = word.toCharArray();
-			int length = word.length();
-			Stemmer s = new Stemmer();
-				    
-			s.add(w, length);
-			s.stem();
-			String stem = s.toString();
-			token.setTermText(stem);
-			
-			
+			if(word.matches("[A-Za-z]+")){
+				
+				char[] w = word.toCharArray();
+				int length = word.length();
+				Stemmer s = new Stemmer();
+					    
+				s.add(w, length);
+				s.stem();
+				String stem = s.toString();
+				token.setTermText(stem);
+				
+				
+			}
 		}
 		return tStreamOld.hasNext();
 	}

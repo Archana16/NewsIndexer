@@ -16,6 +16,7 @@ public class TokenStream implements Iterator<Token> {
 	private ArrayList<Token> mylist; // ArrayList<Vector> will be set here
 	private int index;
 	private int tempIndex;
+	private int lastIndex;
 	private int previous;
 	private int previousLoop;
 	private int current;
@@ -26,7 +27,7 @@ public class TokenStream implements Iterator<Token> {
 
 	public TokenStream(ArrayList<Token> mylist) {
 		this.mylist = mylist;
-		index = tempIndex = 0;
+		index = tempIndex = lastIndex=0;
 		previous = -2;
 		previousLoop = -2;
 		current = -1;
@@ -93,6 +94,7 @@ public class TokenStream implements Iterator<Token> {
 			if (previous < mylist.size() - 1)
 				previous++;
 			current++;
+			lastIndex= index;
 			index = -1;
 			previousLoop = previous;
 			return null;
@@ -165,7 +167,20 @@ public class TokenStream implements Iterator<Token> {
 	 *            : The stream to be appended
 	 */
 	public void append(TokenStream stream) {
-		// TODO : YOU MUST IMPLEMENT THIS
+		if(stream != null){
+			stream.reset();
+			while(stream.hasNext()){
+				Token t = new Token();
+				t.setTermText(stream.next().getTermText());
+				mylist.add(t);
+				if(index== -1)
+					index = lastIndex;
+				
+				
+			}
+			// TODO : YOU MUST IMPLEMENT THIS
+			
+			}
 	}
 
 	/**
@@ -216,7 +231,7 @@ public class TokenStream implements Iterator<Token> {
 		switch(type){
 		case 1: {
 			//first month
-			if(index >1){
+			if(index >2 && index <mylist.size()){
 				mylist.remove(--index);
 				mylist.remove(--index);
 				mylist.set( index, t );
@@ -225,10 +240,10 @@ public class TokenStream implements Iterator<Token> {
 		}
 		case 2 :{
 			//second month
-			if(index >0){
+			if(index >1 && index <mylist.size()){
 				index++;
 				mylist.remove(--index);
-				mylist.remove(--index);
+				//mylist.remove(--index);
 				mylist.set( index, t );
 			}
 			break;
@@ -236,7 +251,7 @@ public class TokenStream implements Iterator<Token> {
 		}
 		case 3 :{
 			//AD-BC
-			if(index >0){
+			if(index >2 && index <mylist.size()){
 				--index;
 				mylist.remove(--index);
 				mylist.set( index, t );
@@ -245,7 +260,7 @@ public class TokenStream implements Iterator<Token> {
 		}
 		case 4 :{
 			//only year and combined time and combined AD //numeric filter
-			if(index >0){
+			if(index >1 && index <mylist.size()){
 				--index;
 				//mylist.remove(--index);
 				mylist.set( index, t );
@@ -254,7 +269,7 @@ public class TokenStream implements Iterator<Token> {
 		}
 		case 5 :{
 			//time
-			if(index >0){
+			if(index >1 && index <mylist.size()){
 				mylist.remove(--index);
 				mylist.set( index, t );
 			}
@@ -262,7 +277,7 @@ public class TokenStream implements Iterator<Token> {
 		}
 		case 6:{
 			//numeric filter
-			if(index >0){
+			if(index >1 && index <mylist.size()){
 				--index;
 				 mylist.remove(index);
 				//++index;

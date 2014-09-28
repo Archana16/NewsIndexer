@@ -62,9 +62,8 @@ public class DateFilter extends TokenFilter {
 				/* System.out.println(convertDate(year, month, date)); */
 
 				if (flag) {
-					if ((next1.charAt(next1.length() - 1) == ',' || next1
-							.charAt(next1.length() - 1) == '.')
-							&& next1.length() > 1) {
+					if (!next2.isEmpty() && (next1.charAt(next1.length() - 1) == ',' || next1
+							.charAt(next1.length() - 1) == '.')) {
 						if (year == "1900")
 							tStreamOld.replaceTokens(
 									5,
@@ -87,9 +86,8 @@ public class DateFilter extends TokenFilter {
 				}
 
 				else {
-					if ((next2.charAt(next2.length() - 1) == ',' || next2
-							.charAt(next2.length() - 1) == '.')
-							&& next2.length() > 1) {
+					if (!next2.isEmpty() && (next2.charAt(next2.length() - 1) == ',' || next2
+							.charAt(next2.length() - 1) == '.')) {
 						if (year == "1900")
 							tStreamOld.replaceTokens(
 									5,
@@ -101,10 +99,10 @@ public class DateFilter extends TokenFilter {
 									convertDate(year, month, date)
 											+ next1.charAt(next1.length() - 1));
 					} else {
-						if (year == "1900")
+						if (year == "1900"){
 							tStreamOld.replaceTokens(5,
 									convertDate(year, month, date));
-						else
+						}else
 							tStreamOld.replaceTokens(2,
 									convertDate(year, month, date));
 
