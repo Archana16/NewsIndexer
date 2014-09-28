@@ -3,7 +3,6 @@
  */
 package edu.buffalo.cse.irf14.analysis;
 
-
 /**
  * Factory class for instantiating a given TokenFilter
  * @author nikhillo
@@ -21,12 +20,24 @@ public class TokenFilterFactory {
 	 * during instantiation
 	 * @return An instance of the factory
 	 */
-	public static TokenFilterFactory getInstance() {
-		//TODO : YOU MUST IMPLEMENT THIS METHOD
-		return new TokenFilterFactory();
-		//return null;
+	private static TokenFilterFactory instance;
+
+	private TokenFilterFactory() {
+		System.out.println("AnalyzerFactory(): Initializing Instance");
 	}
 	
+	public static TokenFilterFactory getInstance() {
+		//TODO : YOU MUST IMPLEMENT THIS METHOD
+		if (instance == null) {
+			synchronized (TokenFilterFactory.class) {
+				if (instance == null) {
+					System.out.println("getInstance(): First time getInstance was invoked!");
+					instance = new TokenFilterFactory();
+				}
+			}
+		}
+		return instance;
+	}
 	/**
 	 * Returns a fully constructed {@link TokenFilter} instance
 	 * for a given {@link TokenFilterType} type

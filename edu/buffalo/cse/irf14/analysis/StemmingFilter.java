@@ -11,6 +11,7 @@ public class StemmingFilter extends TokenFilter {
 	public boolean increment() throws TokenizerException {
 		// TODO Auto-generated method stub
 		//System.out.println("i am in stemmer");
+		System.out.println("Stemmer filter function increment");
 		Token token  = tStreamOld.next();
 		String word  = token.getTermText().trim();
 		

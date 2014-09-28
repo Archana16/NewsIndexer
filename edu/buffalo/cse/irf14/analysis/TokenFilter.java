@@ -3,6 +3,9 @@
  */
 package edu.buffalo.cse.irf14.analysis;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /**
  * The abstract class that you must extend when implementing your 
  * TokenFilter rule implementations.

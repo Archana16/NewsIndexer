@@ -3,6 +3,9 @@
  */
 package edu.buffalo.cse.irf14.analysis;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import edu.buffalo.cse.irf14.document.FieldNames;
 
 /**
@@ -13,6 +16,8 @@ import edu.buffalo.cse.irf14.document.FieldNames;
  *  - Or implemented as a TokenFilter chain that handles {@link FieldNames} specific processing
  */
 public interface Analyzer {
+	//public static HashMap<String, ArrayList<TokenFilterType>> map = new HashMap<String, ArrayList<TokenFilterType>>();
+	
 	/**
 	 * Method to indicate that the implementing class must complete 
 	 * all its processing on the current {@link Token} and proceed to next
@@ -27,4 +32,6 @@ public interface Analyzer {
 	 * @return The underlying stream
 	 */
 	public abstract TokenStream getStream();
+	
+	//public abstract HashMap<String, ArrayList<TokenFilterType>> getMap();
 }

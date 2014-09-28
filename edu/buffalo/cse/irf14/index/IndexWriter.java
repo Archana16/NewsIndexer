@@ -10,6 +10,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import edu.buffalo.cse.irf14.analysis.Analyzer;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,17 +22,25 @@ import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeMap;
+
 import java.util.Map.Entry;
+import java.util.ArrayList;
 
 import edu.buffalo.cse.irf14.analysis.AnalyzerFactory;
 import edu.buffalo.cse.irf14.analysis.Token;
-import edu.buffalo.cse.irf14.analysis.TokenFilter;
-import edu.buffalo.cse.irf14.analysis.TokenFilterFactory;
-import edu.buffalo.cse.irf14.analysis.TokenFilterType;
 import edu.buffalo.cse.irf14.analysis.TokenStream;
 import edu.buffalo.cse.irf14.analysis.Tokenizer;
+import edu.buffalo.cse.irf14.analysis.TokenFilterType;
+import edu.buffalo.cse.irf14.analysis.TokenFilter;
+import edu.buffalo.cse.irf14.analysis.TokenFilterFactory;
+import edu.buffalo.cse.irf14.analysis.TokenizerException;
 import edu.buffalo.cse.irf14.document.Document;
 import edu.buffalo.cse.irf14.document.FieldNames;
+
+import edu.buffalo.cse.irf14.document.ParserException;
+
+import java.util.HashMap;
+
 import edu.buffalo.cse.irf14.document.Parser;
 
 /**
@@ -58,11 +68,6 @@ public class IndexWriter implements java.io.Serializable {
 		// TODO : YOU MUST IMPLEMENT THIS
 		this.indexDir = indexDir;
 	}
-
-	public IndexWriter() {
-		// TODO : YOU MUST IMPLEMENT THIS
-	}
-
 	
 	public static int getNoOfDocs(){
 		return noOfDocs;
@@ -80,125 +85,36 @@ public class IndexWriter implements java.io.Serializable {
 	 */
 	int id=0;
 	public void addDocument(Document d) throws IndexerException {
-		
-		try {
-			noOfDocs++;
-				String docName = d.getField(FieldNames.FILEID)[0];
-			
-			System.out.println( d.getField(FieldNames.CONTENT)[0]);
-			//int docId = docMap.get(docName);
-			System.out.println("after getting it");
-			Tokenizer t = new Tokenizer();
-			//AnalyzerFactory AnalyzerInstance = AnalyzerFactory.getInstance();
-			//Analyzer obj = (Analyzer)AnalyzerInstance.getAnalyzerForField(dir, tstream);
-			for (FieldNames dir : FieldNames.values()) {
-				
-				if( d.getField(dir) != null && !dir.equals(FieldNames.NEWSDATE) && !dir.equals(FieldNames.FILEID)){
-					
-					TreeMap<Integer , Postings> CommonIndex ;
-						if(dir.equals(FieldNames.AUTHOR)){
-							CommonIndex = AuthorIndex;
-						}else if(dir.equals(FieldNames.CATEGORY)){
-							CommonIndex = CategoryIndex;
-						}else if(dir.equals(FieldNames.PLACE)){
-							CommonIndex = PlaceIndex;
-						}else{
-							CommonIndex = TermIndex;
-						}
-						
-				//System.out.println(d.getField(dir)[0]);		
-				TokenStream tstream = t.consume(d.getField(dir)[0]);
-				TokenFilterFactory factory = TokenFilterFactory.getInstance();
-				TokenFilter filter;
-				
-				
-				tstream.reset();
-				 
-				 filter = factory.getFilterByType(TokenFilterType.ACCENT ,tstream);
-				 tstream.reset();
-				 while (tstream.hasNext()) {
-					 	filter.increment(); 
-				}
-				 
-				System.out.println("------------------------------after accent-------------------------");
-				
-				 
-				 filter = factory.getFilterByType(TokenFilterType.NUMERIC,tstream);
-				 tstream.reset();
-				 while (tstream.hasNext()){
-						filter.increment();
-				 	}
-				System.out.println("------------------------------after numeric filter-------------------------");
-				
-				 tstream.reset();
-				 filter = factory.getFilterByType(TokenFilterType.CAPITALIZATION, tstream);
-				 tstream.reset();
-				 while (tstream.hasNext()) {
-						filter.increment();
-					}
-				 System.out.println("------------------------------after capitalization-------------------------");
-					
-					
-				 
-				 tstream.reset();
-				 filter = factory.getFilterByType(TokenFilterType.SYMBOL,tstream); 
-				 tstream.reset();
-				 while (tstream.hasNext()) {
-					 filter.increment(); 
-				} 
-				 System.out.println("------------------------------after symbol-------------------------"); 
-				  
-				
-				filter = factory.getFilterByType(TokenFilterType.SPECIALCHARS,tstream);
-				tstream.reset();
-				while (tstream.hasNext()) {
-					filter.increment();
-				}
 
-				System.out.println("------------------------------after SPECIALCHARS-------------------------");
-				
-				
-				/* tstream.reset();
-				 
-				filter = factory.getFilterByType(TokenFilterType.DATE, tstream);
-				tstream.reset();
-				while (tstream.hasNext()) {
-					filter.increment();
-				}
+		//with analyzer
+		Tokenizer tknizer = new Tokenizer();
+		AnalyzerFactory fact = AnalyzerFactory.getInstance();
 
-				System.out.println("------------------------------after datefilter-------------------------");
-				*/
-				
-				
-				
-				 filter = factory.getFilterByType(TokenFilterType.STOPWORD,tstream);
-				 tstream.reset();
-				 while (tstream.hasNext()){
-					 filter.increment(); 
+		noOfDocs++;
+			String docName = d.getField(FieldNames.FILEID)[0];
+		for (FieldNames dir : FieldNames.values()) {
+			try {
+				TreeMap<Integer , Postings> CommonIndex ;
+				if(dir.equals(FieldNames.AUTHOR)){
+					CommonIndex = AuthorIndex;
+				}else if(dir.equals(FieldNames.CATEGORY)){
+					CommonIndex = CategoryIndex;
+				}else if(dir.equals(FieldNames.PLACE)){
+					CommonIndex = PlaceIndex;
+				}else{
+					CommonIndex = TermIndex;
 				}
-				  
-				  
-				 System.out.println("------------------------------after stopword-------------------------"); 
 				
-				 
-				 tstream.reset();
+				
+				
+				TokenStream stream = tknizer.consume(d.getField(dir)[0]);
+				Analyzer analyzer = fact.getAnalyzerForField(dir, stream);
+				while (analyzer.increment()) {
 					
-				
-				  
-				 filter = factory.getFilterByType(TokenFilterType.STEMMER,tstream);
-				 tstream.reset();
-				 while (tstream.hasNext()) {
-					 filter.increment(); 
-				 }
-				 
-				 System.out.println("------------------------------after stemmer-------------------------"); 
-				
-				  
-				  
-				//add term,if not present, in term index and then add it in the main index
-				tstream.reset();
-				 while (tstream.hasNext()){
-						String term = tstream.next().toString().trim();
+				}
+				stream.reset();
+				 while (stream.hasNext()){
+						String term = stream.next().toString().trim();
 						//System.out.println("word = "+term);
 						if(!termMap.containsKey(term)){
 							termMap.put(term,termId++);
@@ -209,14 +125,38 @@ public class IndexWriter implements java.io.Serializable {
 						addDocumentToIndex(CommonIndex,termMap.get(term),d.getField(FieldNames.FILEID)[0]);
 					}	
 				}
+				
+			catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			System.out.println("exception is from " + e);
-			return;
 		}
-
 	}
+		//previous one
+	/*	try {
+			Tokenizer t = new Tokenizer();
+			for (FieldNames dir : FieldNames.values()) {
+					System.out.println(dir + " = " + d.getField(dir)[0]);
+					TokenStream tstream = t.consume(d.getField(dir)[0]);
+					TokenFilterFactory factory = TokenFilterFactory.getInstance();
+					TokenFilter filter;
 
+					
+					  filter =factory.getFilterByType(TokenFilterType.DATE,tstream); 
+					  tstream.reset(); 
+					  while (tstream.hasNext()) {
+					  filter.increment(); 
+					  }
+					  System.out.println("----------------after stopword------------");
+					  tstream.reset(); 
+					  while(tstream.hasNext())
+						  System.out.println("next is "+tstream.next());
+			}
+		}catch (Exception e) {
+				System.out.println("exception is " + e);
+
+			}*/
+				
 	
 	public int getTermNo(){
 		return termId;

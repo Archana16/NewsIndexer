@@ -22,9 +22,10 @@ public class DateFilter extends TokenFilter {
 				"jan", "febuary", "feb", "march", "april", "may", "june",
 				"july", "august", "aug", "september", "sep", "october", "oct",
 				"november", "nov", "december", "dec"));
-		boolean flag = false, comma = false;
-		String cur = "", next1 = "", next2 = "", prev = "", year = "1900", month = "january", date = "01", hour = "00", minute = "00", second = "00", time = "", type = "";
+
 		while (tStreamOld.hasNext()) {
+			boolean flag = false;
+			String cur = "", next1 = "", next2 = "", prev = "", year = "1900", month = "january", date = "01", hour = "00", minute = "00", second = "00", time = "", type = "";
 			cur = (tStreamOld.hasNext()) ? tStreamOld.next().getTermText() : "";
 
 			next1 = (tStreamOld.hasTokenbyIndex(tStreamOld.getIndex())) ? tStreamOld
@@ -36,8 +37,10 @@ public class DateFilter extends TokenFilter {
 			prev = (tStreamOld.hasTokenbyIndex(tStreamOld.getIndex() - 2)) ? tStreamOld
 					.getTokenByIndex((tStreamOld.getIndex() - 2)).getTermText()
 					: "";
-			//System.out.println("before: " + cur + " " + next1 + " " + next2
-				//	+ " " + prev);
+			/*
+			 * System.out.println("before: " + cur + " " + next1 + " " + next2 +
+			 * " " + prev);
+			 */
 			if (list.contains(cur.toLowerCase())) {
 				month = cur;
 				if (prev.matches("^\\d{1,2},?$")) {
@@ -46,28 +49,32 @@ public class DateFilter extends TokenFilter {
 				}
 				if (next1.matches("^\\d{1,2},?$"))
 					date = next1.replace(",", "");
-				if (next1.matches("^\\d{4},?$")) {
-					if (next1.charAt(next1.length() - 1) == ',')
-						comma = true;
+				if (next1.matches("^\\d{4}[,.]?$")) {
 					year = next1.replace(",", "");
+					year = year.replace(".", "");
 				}
-
-				if (next2.matches("^\\d{4},?$")) {
-					if (next2.charAt(next2.length() - 1) == ',')
-						comma = true;
+				if (next2.matches("^\\d{4}[.,]?$")) {
 					year = next2.replace(",", "");
+					year = year.replace(".", "");
 				}
-				// System.out.println("Before date:" + month + " " + year + " "
-				// + date);
-				//System.out.println(convertDate(year, month, date));
+				// System.out.println("after date:" + month + " " + year + " "+
+				// date);
+				/* System.out.println(convertDate(year, month, date)); */
+
 				if (flag) {
-					if (comma) {
+					if ((next1.charAt(next1.length() - 1) == ',' || next1
+							.charAt(next1.length() - 1) == '.')
+							&& next1.length() > 1) {
 						if (year == "1900")
-							tStreamOld.replaceTokens(5,
-									convertDate(year, month, date) + ",");
+							tStreamOld.replaceTokens(
+									5,
+									convertDate(year, month, date)
+											+ next1.charAt(next1.length() - 1));
 						else
-							tStreamOld.replaceTokens(1,
-									convertDate(year, month, date) + ",");
+							tStreamOld.replaceTokens(
+									1,
+									convertDate(year, month, date)
+											+ next1.charAt(next1.length() - 1));
 					} else {
 						if (year == "1900")
 							tStreamOld.replaceTokens(5,
@@ -80,13 +87,19 @@ public class DateFilter extends TokenFilter {
 				}
 
 				else {
-					if (comma) {
+					if ((next2.charAt(next2.length() - 1) == ',' || next2
+							.charAt(next2.length() - 1) == '.')
+							&& next2.length() > 1) {
 						if (year == "1900")
-							tStreamOld.replaceTokens(5,
-									convertDate(year, month, date) + ",");
+							tStreamOld.replaceTokens(
+									5,
+									convertDate(year, month, date)
+											+ next1.charAt(next1.length() - 1));
 						else
-							tStreamOld.replaceTokens(2,
-									convertDate(year, month, date) + ",");
+							tStreamOld.replaceTokens(
+									2,
+									convertDate(year, month, date)
+											+ next1.charAt(next1.length() - 1));
 					} else {
 						if (year == "1900")
 							tStreamOld.replaceTokens(5,
@@ -99,23 +112,21 @@ public class DateFilter extends TokenFilter {
 				}
 
 			} else if (cur.matches("^\\d{4}(-\\d{2})?[,.]?$")) {
-				if (cur.charAt(cur.length() - 1) == '.'
-						|| cur.charAt(cur.length() - 1) == ',')
-					comma=true;
-				else comma = false;
 				String years[] = cur.split("-");
 				if (years.length > 1) {
 					years[0] = years[0].replace(",", "");
 					years[1] = years[0].substring(0, 2).concat(years[1]);
-					years[1] = years[1].substring(0, years[1].length()-1);
-					if (comma)
-						tStreamOld.replaceTokens(
-								4,
-								convertDate(years[0], month, date)+"-"+convertDate(years[1], month, date)
+					years[1] = years[1].substring(0, years[1].length() - 1);
+					if ((cur.charAt(cur.length() - 1) == ',' || cur.charAt(cur
+							.length() - 1) == '.') && cur.length() > 1)
+						tStreamOld.replaceTokens(4,
+								convertDate(years[0], month, date) + "-"
+										+ convertDate(years[1], month, date)
 										+ cur.charAt(cur.length() - 1));
 					else
 						tStreamOld.replaceTokens(4,
-								convertDate(years[0], month, date)+"-"+convertDate(years[1], month, date));
+								convertDate(years[0], month, date) + "-"
+										+ convertDate(years[1], month, date));
 
 					/*
 					 * System.out.println(convertDate(years[0], month, date) +
@@ -123,8 +134,9 @@ public class DateFilter extends TokenFilter {
 					 */
 				} else {
 					year = cur.replace(",", "");
-					if (cur.charAt(cur.length() - 1) == '.'
-							|| cur.charAt(cur.length() - 1) == ',')
+					year = year.replace(".", "");
+					if ((cur.charAt(cur.length() - 1) == '.' || cur.charAt(cur
+							.length() - 1) == ',') && cur.length() > 1)
 						tStreamOld.replaceTokens(
 								4,
 								convertDate(year, month, date)
@@ -132,8 +144,9 @@ public class DateFilter extends TokenFilter {
 					else
 						tStreamOld.replaceTokens(4,
 								convertDate(year, month, date));
-					//tStreamOld.replaceTokens(4, convertDate(year, month, date));
-					// System.out.println(convertDate(year, month, date));
+					// tStreamOld.replaceTokens(4, convertDate(year, month,
+					// date));
+					/* System.out.println(convertDate(year, month, date)); */
 				}
 
 			} else if (cur.matches("^(\\d{1,2}:\\d{2})(:\\d{2})?$")) {
@@ -188,8 +201,10 @@ public class DateFilter extends TokenFilter {
 					tStreamOld.replaceTokens(3,
 							convertBC_AD(year, month, date, "AD"));
 				// System.out.println(convertBC_AD(year, month, date, "AD"));
-				//System.out.println("after: " + cur + " " + next1 + " " + next2
-						//+ " " + prev);
+				/*
+				 * System.out.println("after: " + cur + " " + next1 + " " +
+				 * next2 + " " + prev);
+				 */
 			} else if (cur.matches("^\\d{1,4}((BC)|(AD))[.,]$")) {
 				if (cur.charAt(cur.length() - 1) == '.'
 						|| cur.charAt(cur.length() - 1) == ',') {
@@ -203,7 +218,6 @@ public class DateFilter extends TokenFilter {
 									cur.substring(cur.length() - 3,
 											cur.length() - 1))
 									+ cur.charAt(cur.length() - 1));
-
 				} else {
 					year = cur.substring(0, cur.length() - 2);
 					convertBC_AD(year, month, date,
