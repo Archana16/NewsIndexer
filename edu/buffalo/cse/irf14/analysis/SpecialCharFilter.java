@@ -13,6 +13,7 @@ public class SpecialCharFilter extends TokenFilter {
 	@Override
 	public boolean increment() throws TokenizerException {
 		// TODO Auto-generated method stub
+		System.out.println("Special Character filter function increment");
 		Token token  = tStreamOld.next();
 		String word  = token.getTermText().trim();
 		
@@ -20,7 +21,7 @@ public class SpecialCharFilter extends TokenFilter {
 		Pattern pattern = Pattern.compile(pat);
 		Matcher matcher = pattern.matcher(word);
 		
-		System.out.println("initially word was "+word);
+		//System.out.println("initially word was "+word);
 		
 		while(matcher.find()) {
 			tStreamOld.remove();

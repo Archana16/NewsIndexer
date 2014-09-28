@@ -9,15 +9,23 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+
+import edu.buffalo.cse.irf14.analysis.Analyzer;
 import edu.buffalo.cse.irf14.analysis.AnalyzerFactory;
 import edu.buffalo.cse.irf14.analysis.Token;
-import edu.buffalo.cse.irf14.analysis.TokenFilter;
-import edu.buffalo.cse.irf14.analysis.TokenFilterFactory;
-import edu.buffalo.cse.irf14.analysis.TokenFilterType;
 import edu.buffalo.cse.irf14.analysis.TokenStream;
 import edu.buffalo.cse.irf14.analysis.Tokenizer;
+import edu.buffalo.cse.irf14.analysis.TokenFilterType;
+import edu.buffalo.cse.irf14.analysis.TokenFilter;
+import edu.buffalo.cse.irf14.analysis.TokenFilterFactory;
+import edu.buffalo.cse.irf14.analysis.TokenizerException;
 import edu.buffalo.cse.irf14.document.Document;
 import edu.buffalo.cse.irf14.document.FieldNames;
+import edu.buffalo.cse.irf14.document.ParserException;
+
+import java.util.HashMap;
 
 /**
  * @author nikhillo Class responsible for writing indexes to disk
@@ -50,109 +58,51 @@ public class IndexWriter {
 	 */
 	public void addDocument(Document d) throws IndexerException {
 
-		try {
-			Tokenizer t = new Tokenizer();
-			AnalyzerFactory AnalyzerInstance = AnalyzerFactory.getInstance();
+		//with analyzer
+		Tokenizer tknizer = new Tokenizer();
+		AnalyzerFactory fact = AnalyzerFactory.getInstance();
 
+		for (FieldNames dir : FieldNames.values()) {
+			try {
+				TokenStream stream = tknizer.consume(d.getField(dir)[0]);
+				Analyzer analyzer = fact.getAnalyzerForField(dir, stream);
+				while (analyzer.increment()) {
+					
+				}
+				stream.reset();
+				}
+			catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		//previous one
+	/*	try {
+			Tokenizer t = new Tokenizer();
 			for (FieldNames dir : FieldNames.values()) {
 					System.out.println(dir + " = " + d.getField(dir)[0]);
 					TokenStream tstream = t.consume(d.getField(dir)[0]);
-					//Analyzer obj = (Analyzer)AnalyzerInstance.getAnalyzerForField(dir, tstream);
-					TokenFilterFactory factory = TokenFilterFactory
-							.getInstance();
+					TokenFilterFactory factory = TokenFilterFactory.getInstance();
 					TokenFilter filter;
 
-					/*
-					 * filter =
-					 * factory.getFilterByType(TokenFilterType.STOPWORD,
-					 * tstream); tstream.reset(); while (tstream.hasNext()) {
-					 * filter.increment(); }
-					 * 
-					 * 
-					 * System.out.println(
-					 * "------------------------------after stopword-------------------------"
-					 * ); tstream.reset(); while(tstream.hasNext())
-					 * System.out.println("next is "+tstream.next());
-					 * 
-					 * 
-					 * 
-					 * filter = factory.getFilterByType(TokenFilterType.SYMBOL,
-					 * tstream); tstream.reset(); while (tstream.hasNext()) {
-					 * filter.increment(); } System.out.println(
-					 * "------------------------------after symbol-------------------------"
-					 * ); tstream.reset(); while(tstream.hasNext())
-					 * System.out.println("next is "+tstream.next());
-					 * 
-					 * 
-					 * tstream.reset();
-					 * 
-					 * filter = factory.getFilterByType(TokenFilterType.STEMMER,
-					 * tstream); tstream.reset(); while (tstream.hasNext()) {
-					 * filter.increment(); }
-					 * 
-					 * System.out.println(
-					 * "------------------------------after stemmer-------------------------"
-					 * ); tstream.reset(); while(tstream.hasNext())
-					 * System.out.println("next is "+tstream.next());
-					 * 
-					 * 
-					 * tstream.reset();
-					 * 
-					 * filter = factory.getFilterByType(TokenFilterType.ACCENT ,
-					 * tstream); tstream.reset(); while (tstream.hasNext()) {
-					 * filter.increment(); }
-					 * 
-					 * System.out.println(
-					 * "------------------------------after accent-------------------------"
-					 * );
-					 * 
-					 * tstream.reset(); while(tstream.hasNext())
-					 * System.out.println("next is "+tstream.next());
-					 * 
-					 * tstream.reset();
-					 */
-					filter = factory.getFilterByType(TokenFilterType.DATE,
-							tstream);
-					tstream.reset();
-					while (tstream.hasNext()) {
-						filter.increment();
-					}
-
-					System.out
-							.println("------------------------------after datefilter-------------------------");
-					/*tstream.reset();
-					while (tstream.hasNext())
-						System.out.println("next is " + tstream.next());
 					
-				   filter = factory.getFilterByType(TokenFilterType.CAPITALIZATION, tstream);
-					tstream.reset();
-					while (tstream.hasNext()) {
-						filter.increment();
-						
-					}
-					
-					
-					System.out.println("------------------------------after capitalization-------------------------");
-					tstream.reset();
-					while(tstream.hasNext())
-						System.out.println("next is "+tstream.next());
-					*/
-					filter = factory.getFilterByType(TokenFilterType.NUMERIC,
-							tstream);
-					tstream.reset();
-					while (tstream.hasNext()) {
-						filter.increment();
-					}
-					System.out.println("------------------------------after numeric filter-------------------------");
-					while(tstream.hasNext())
-						System.out.println("next is "+tstream.next());
+					  filter =factory.getFilterByType(TokenFilterType.DATE,tstream); 
+					  tstream.reset(); 
+					  while (tstream.hasNext()) {
+					  filter.increment(); 
+					  }
+					  System.out.println("----------------after stopword------------");
+					  tstream.reset(); 
+					  while(tstream.hasNext())
+						  System.out.println("next is "+tstream.next());
 			}
+		}catch (Exception e) {
+				System.out.println("exception is " + e);
 
-		} catch (Exception e) {
-			System.out.println("exception is " + e);
+			}*/
 
-		}
-
+		//
 	}
 
 	/**

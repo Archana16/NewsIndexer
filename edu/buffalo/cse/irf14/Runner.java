@@ -65,7 +65,7 @@ public class Runner {
 		IndexWriter writer = new IndexWriter();
 		
 		//uncomment out this for one file
-/*		try{
+		/*try{
 			try {
 				d = Parser.parse("/home/archana/workspace-ir/IR/training/dfl/0007273");
 				System.out.println(d.getField(FieldNames.FILEID)[0]);
@@ -74,7 +74,7 @@ public class Runner {
 				System.out.println(d.getField(FieldNames.AUTHOR)[0]);
 				System.out.println(d.getField(FieldNames.AUTHORORG)[0]);
 				System.out.println(d.getField(FieldNames.NEWSDATE)[0]);
-				//writer.addDocument(d);
+				writer.addDocument(d);
 			} catch (Exception e) {//ParserException
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -97,8 +97,8 @@ public class Runner {
 				for (String f : files) {
 					try {
 						d = Parser.parse(dir.getAbsolutePath() + File.separator +f);
-						System.out.println("back from"+dir.getAbsolutePath() + File.separator +f);
-						//writer.addDocument(d);
+						//System.out.println("back from"+dir.getAbsolutePath() + File.separator +f);
+						writer.addDocument(d);
 					} catch (ParserException e) {//ParserException
 						// TODO Auto-generated catch block
 						e.getMessage();

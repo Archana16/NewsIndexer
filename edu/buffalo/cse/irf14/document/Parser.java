@@ -75,11 +75,9 @@ public class Parser {
 					token = words.next();
 					while (true) {
 						if (token.contains("</AUTHOR>")) {
-							token = token.replace("</AUTHOR>", "");
-							Author += " " + token;
 							break;
 						} else {
-							Author += " " + token;
+							Author +=token+" ";
 							token = words.hasNext() ? words.next() : "";
 						}
 					}
@@ -118,7 +116,7 @@ public class Parser {
 
 	public static Document parse(String filename) throws ParserException {
 
-		// System.out.println(filename);
+		System.out.println("Parsing begins");
 
 		if (filename == null || filename == "") {
 			throw new ParserException("Filename is empty");
@@ -146,7 +144,7 @@ public class Parser {
 						if (Title.isEmpty())
 							Title = string;
 					} else {
-						Content += string;
+						Content +=string+" ";
 					}
 				}
 				d.setField(FieldNames.TITLE, Title);
@@ -156,6 +154,7 @@ public class Parser {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			System.out.println("Parsing ends");
 			return d;
 		}
 	}

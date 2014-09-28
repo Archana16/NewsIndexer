@@ -16,6 +16,7 @@ public class CapitalizationFilter extends TokenFilter {
 	@Override
 	public boolean increment() throws TokenizerException {
 		// TODO Auto-generated method stub
+		System.out.println("capitalization filter function increment");
 		Token token  = tStreamOld.next();
 		String word  = token.getTermText().trim();
 		String line = word;
