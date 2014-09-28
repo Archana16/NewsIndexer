@@ -3,14 +3,34 @@
  */
 package edu.buffalo.cse.irf14.index;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.Map.Entry;
+
+import edu.buffalo.cse.irf14.Runner;
+import edu.buffalo.cse.irf14.analysis.Analyzer;
+import edu.buffalo.cse.irf14.analysis.AnalyzerFactory;
+import edu.buffalo.cse.irf14.analysis.TokenStream;
+import edu.buffalo.cse.irf14.analysis.Tokenizer;
+import edu.buffalo.cse.irf14.analysis.TokenizerException;
+import edu.buffalo.cse.irf14.document.FieldNames;
+import edu.buffalo.cse.irf14.document.Parser;
 
 /**
  * @author nikhillo
  * Class that emulates reading data back from a written index
  */
 public class IndexReader {
+	
+	private TreeMap<Integer , Postings> map;
+	private static TreeMap<String , Integer> termMap ;
+	//private static TreeMap<String , Integer> docMap;
+	//private static TreeMap<Integer,String> reverseDocMap ;
+	
 	/**
 	 * Default constructor
 	 * @param indexDir : The root directory from which the index is to be read.
@@ -20,6 +40,51 @@ public class IndexReader {
 	 */
 	public IndexReader(String indexDir, IndexType type) {
 		//TODO
+		FileInputStream file,fileInMain; 
+		ObjectInputStream in,inMain; 
+		String fileName;
+		System.out.println("index dir i got is"+indexDir);
+		//get term and doc dictionary
+		try{
+			file = new FileInputStream(indexDir+ File.separator+"TermMap");
+			in = new ObjectInputStream(file);
+			termMap = (TreeMap<String,Integer>)in.readObject();
+			
+			
+			
+			in.close();
+		}catch(Exception e){
+			System.out.println("exception reading dictionaries from map");
+		}
+		
+		 switch (type) {
+	         case TERM: fileName = "Term";break;
+	         case AUTHOR: fileName = "Author";break;
+	         case CATEGORY:fileName = "Category"; break;
+	         case PLACE:fileName = "Place"; break;
+	         default: fileName = "Term";break;
+		 	}
+		
+		 try{
+			fileInMain = new FileInputStream(indexDir+ File.separator+fileName);
+			inMain = new ObjectInputStream(fileInMain);
+			try{
+				int i =0;
+				map= (TreeMap<Integer,Postings>)inMain.readObject();
+				for (Entry<Integer,Postings> entry : map.entrySet()) {
+				 	System.out.println(i++ +"  key was "+entry.getKey());
+				}	
+			}catch(ClassNotFoundException e){
+				System.out.println("out obje"+e);
+			}
+			inMain.close();
+		}catch(Exception e){
+			System.out.println("out obje"+e);
+		}
+		
+		
+		
+		
 	}
 	
 	/**
@@ -29,7 +94,7 @@ public class IndexReader {
 	 */
 	public int getTotalKeyTerms() {
 		//TODO : YOU MUST IMPLEMENT THIS
-		return -1;
+		return map.size();
 	}
 	
 	/**
@@ -39,7 +104,8 @@ public class IndexReader {
 	 */
 	public int getTotalValueTerms() {
 		//TODO: YOU MUST IMPLEMENT THIS
-		return -1;
+		System.out.println("-------total val terms ="+IndexWriter.getNoOfDocs());
+		return IndexWriter.getNoOfDocs();
 	}
 	
 	/**
@@ -51,9 +117,37 @@ public class IndexReader {
 	 * number of occurrences as values if the given term was found, null otherwise.
 	 */
 	public Map<String, Integer> getPostings(String term) {
-		//TODO:YOU MUST IMPLEMENT THIS
+		String query = getAnalyzedTerm(term);
+		if(termMap.containsKey(query)){
+			Postings p = map.get(termMap.get(term));
+			Map<String,Integer> postingMap = p.getDocMap();
+			return postingMap;
+		}
+		
 		return null;
 	}
+	
+	
+	private static String getAnalyzedTerm(String string) {
+		Tokenizer tknizer = new Tokenizer();
+		AnalyzerFactory fact = AnalyzerFactory.getInstance();
+		try {
+			TokenStream stream = tknizer.consume(string);
+			Analyzer analyzer = fact.getAnalyzerForField(FieldNames.CONTENT, stream);
+			
+			while (analyzer.increment()) {
+				
+			}
+			
+			stream.reset();
+			return stream.next().toString();
+		} catch (TokenizerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	
 	/**
 	 * Method to get the top k terms from the index in terms of the total number

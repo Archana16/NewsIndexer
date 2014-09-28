@@ -12,8 +12,8 @@ import java.util.*;
 public class Parser {
 	
 	private static int docMapIndex=1;
-	private static TreeMap<String , Integer> docMap = new TreeMap<String, Integer>();
-	
+	//private static TreeMap<String , Integer> docMap = new TreeMap<String, Integer>();
+	//private static TreeMap<Integer,String> reverseDocMap = new TreeMap<Integer,String>();
 	/**
 	 * Static method to parse the given file into the Document object
 	 * 
@@ -24,13 +24,19 @@ public class Parser {
 	 *             In case any error occurs during parsing
 	 */
 
-	public static TreeMap<String,Integer> getDocMap(){
+	/*public static TreeMap<String,Integer> getDocMap(){
 		return docMap;
 	} 
-	
+	public static TreeMap<Integer,String> getReverseDocMap(){
+		return reverseDocMap;
+	} 
 	public static void setDocMap(String doc_name){
-			docMap.put(doc_name,docMapIndex++);
+		reverseDocMap.put(docMapIndex, doc_name);	
+		docMap.put(doc_name,docMapIndex++);
+			
 	}
+	*/
+	
 	public static int getNoOfFiles(){
 		return docMapIndex;
 	}
@@ -171,7 +177,7 @@ public class Parser {
 						if (Title.isEmpty())
 							Title = string;
 					} else {
-						Content += string;
+						Content += string+"  ";
 					}
 				}
 				d.setField(FieldNames.TITLE, Title);
@@ -181,8 +187,8 @@ public class Parser {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			String docName = d.getField(FieldNames.CATEGORY)[0]+"_"+d.getField(FieldNames.FILEID)[0];
-			setDocMap(docName);
+			//String docName = d.getField(FieldNames.FILEID)[0];
+			//setDocMap(docName);
 			return d;
 		}
 	}

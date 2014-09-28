@@ -8,12 +8,12 @@ public class Postings implements java.io.Serializable{
 		
 		private int docFrequency;
 		private int termFrequency;
-		private TreeMap<Integer , Integer> docToFreqMap;
+		private TreeMap<String , Integer> docToFreqMap;
 		
 		public Postings() {
 			docFrequency = 0;
 			termFrequency = 0;		
-			docToFreqMap = new TreeMap<Integer, Integer>();
+			docToFreqMap = new TreeMap<String, Integer>();
 		}
 		// TODO Auto-generated constructor stub
 		
@@ -30,14 +30,17 @@ public class Postings implements java.io.Serializable{
 			 System.out.println("\n--------------------------------------------------------------------------------------------------------------\n");
 		}
 		
-		public boolean checkDocumentPresent(int docId){
+		public TreeMap<String, Integer> getDocMap(){
+			return docToFreqMap;
+		}
+		public boolean checkDocumentPresent(String docId){
 			if(docToFreqMap.containsKey(docId))
 				return true;
 			else
 				return false;
 		}
 	
-		public void addDocument(int docId){
+		public void addDocument(String docId){
 			
 			docToFreqMap.put(docId,1) ;
 			docFrequency++;
@@ -45,12 +48,12 @@ public class Postings implements java.io.Serializable{
 				
 		}
 		
-		public void incrementExistingDoc(int docId){
+		public void incrementExistingDoc(String docId){
 			docToFreqMap.put(docId,docToFreqMap.get(docId)+1);
 			termFrequency++;
 		}
 
-		public boolean hasDoc(int docId){
+		public boolean hasDoc(String docId){
 			if(docToFreqMap.containsKey(docId))
 				return true;
 			else 

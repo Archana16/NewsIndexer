@@ -10,18 +10,19 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeMap;
-
+import java.util.Map.Entry;
 
 import edu.buffalo.cse.irf14.analysis.AnalyzerFactory;
-
 import edu.buffalo.cse.irf14.analysis.Token;
 import edu.buffalo.cse.irf14.analysis.TokenFilter;
 import edu.buffalo.cse.irf14.analysis.TokenFilterFactory;
@@ -38,9 +39,9 @@ import edu.buffalo.cse.irf14.document.Parser;
 public class IndexWriter implements java.io.Serializable {
 	private static int termId = 1;
 	int i =0;
-	transient private static TreeMap<String , Integer> termMap = new TreeMap<String, Integer>();
-	transient private static TreeMap<String , Integer> docMap = Parser.getDocMap();
 	transient String indexDir;
+	static int noOfDocs=0;
+	private static TreeMap<String , Integer> termMap = new TreeMap<String, Integer>();
 	private static TreeMap<Integer , Postings> TermIndex = new TreeMap<Integer , Postings>();
 	private static TreeMap<Integer , Postings> AuthorIndex = new TreeMap<Integer , Postings>();
 	private static TreeMap<Integer , Postings> CategoryIndex = new TreeMap<Integer , Postings>();
@@ -62,6 +63,10 @@ public class IndexWriter implements java.io.Serializable {
 		// TODO : YOU MUST IMPLEMENT THIS
 	}
 
+	
+	public static int getNoOfDocs(){
+		return noOfDocs;
+	}
 	/**
 	 * Method to add the given Document to the index This method should take
 	 * care of reading the filed values, passing them through corresponding
@@ -77,12 +82,17 @@ public class IndexWriter implements java.io.Serializable {
 	public void addDocument(Document d) throws IndexerException {
 		
 		try {
-			String docName = d.getField(FieldNames.CATEGORY)[0]+"_"+d.getField(FieldNames.FILEID)[0];
-			int docId = docMap.get(docName);
+			noOfDocs++;
+				String docName = d.getField(FieldNames.FILEID)[0];
+			
+			System.out.println( d.getField(FieldNames.CONTENT)[0]);
+			//int docId = docMap.get(docName);
+			System.out.println("after getting it");
 			Tokenizer t = new Tokenizer();
 			//AnalyzerFactory AnalyzerInstance = AnalyzerFactory.getInstance();
 			//Analyzer obj = (Analyzer)AnalyzerInstance.getAnalyzerForField(dir, tstream);
 			for (FieldNames dir : FieldNames.values()) {
+				
 				if( d.getField(dir) != null && !dir.equals(FieldNames.NEWSDATE) && !dir.equals(FieldNames.FILEID)){
 					
 					TreeMap<Integer , Postings> CommonIndex ;
@@ -96,7 +106,7 @@ public class IndexWriter implements java.io.Serializable {
 							CommonIndex = TermIndex;
 						}
 						
-						
+				//System.out.println(d.getField(dir)[0]);		
 				TokenStream tstream = t.consume(d.getField(dir)[0]);
 				TokenFilterFactory factory = TokenFilterFactory.getInstance();
 				TokenFilter filter;
@@ -110,25 +120,34 @@ public class IndexWriter implements java.io.Serializable {
 					 	filter.increment(); 
 				}
 				 
-				// System.out.println("------------------------------after accent-------------------------");
-				 tstream.reset();
-				 
-				 filter = factory.getFilterByType(TokenFilterType.SYMBOL,tstream); 
-				 tstream.reset();
-				 while (tstream.hasNext()) {
-					 filter.increment(); 
-				} 
-				 //System.out.println("------------------------------after symbol-------------------------"); 
-				  
+				System.out.println("------------------------------after accent-------------------------");
+				
 				 
 				 filter = factory.getFilterByType(TokenFilterType.NUMERIC,tstream);
 				 tstream.reset();
 				 while (tstream.hasNext()){
 						filter.increment();
 				 	}
-				//System.out.println("------------------------------after numeric filter-------------------------");
+				System.out.println("------------------------------after numeric filter-------------------------");
 				
 				 tstream.reset();
+				 filter = factory.getFilterByType(TokenFilterType.CAPITALIZATION, tstream);
+				 tstream.reset();
+				 while (tstream.hasNext()) {
+						filter.increment();
+					}
+				 System.out.println("------------------------------after capitalization-------------------------");
+					
+					
+				 
+				 tstream.reset();
+				 filter = factory.getFilterByType(TokenFilterType.SYMBOL,tstream); 
+				 tstream.reset();
+				 while (tstream.hasNext()) {
+					 filter.increment(); 
+				} 
+				 System.out.println("------------------------------after symbol-------------------------"); 
+				  
 				
 				filter = factory.getFilterByType(TokenFilterType.SPECIALCHARS,tstream);
 				tstream.reset();
@@ -136,21 +155,8 @@ public class IndexWriter implements java.io.Serializable {
 					filter.increment();
 				}
 
-				//System.out.println("------------------------------after SPECIALCHARS-------------------------");
-				tstream.reset();
+				System.out.println("------------------------------after SPECIALCHARS-------------------------");
 				
-				 
-				  
-				 filter = factory.getFilterByType(TokenFilterType.STEMMER,tstream);
-				 tstream.reset();
-				 while (tstream.hasNext()) {
-					 filter.increment(); 
-				 }
-				 
-				// System.out.println("------------------------------after stemmer-------------------------"); 
-				
-				  
-				  
 				
 				/* tstream.reset();
 				 
@@ -163,15 +169,7 @@ public class IndexWriter implements java.io.Serializable {
 				System.out.println("------------------------------after datefilter-------------------------");
 				*/
 				
-				tstream.reset();
-				filter = factory.getFilterByType(TokenFilterType.CAPITALIZATION, tstream);
-				tstream.reset();
-				while (tstream.hasNext()) {
-					filter.increment();
-				}
-				//System.out.println("------------------------------after capitalization-------------------------");
 				
-				tstream.reset();
 				
 				 filter = factory.getFilterByType(TokenFilterType.STOPWORD,tstream);
 				 tstream.reset();
@@ -180,9 +178,23 @@ public class IndexWriter implements java.io.Serializable {
 				}
 				  
 				  
-				// System.out.println("------------------------------after stopword-------------------------"); 
-				 tstream.reset();
+				 System.out.println("------------------------------after stopword-------------------------"); 
 				
+				 
+				 tstream.reset();
+					
+				
+				  
+				 filter = factory.getFilterByType(TokenFilterType.STEMMER,tstream);
+				 tstream.reset();
+				 while (tstream.hasNext()) {
+					 filter.increment(); 
+				 }
+				 
+				 System.out.println("------------------------------after stemmer-------------------------"); 
+				
+				  
+				  
 				//add term,if not present, in term index and then add it in the main index
 				tstream.reset();
 				 while (tstream.hasNext()){
@@ -191,23 +203,26 @@ public class IndexWriter implements java.io.Serializable {
 						if(!termMap.containsKey(term)){
 							termMap.put(term,termId++);
 							System.out.println(id++ +" word = "+term);
-							if(termId>5000)
-								break;
+						}else{
+							//System.out.println("already had = "+term+" at= "+termMap.get(term));
 						}	
-						addDocumentToIndex(CommonIndex,termMap.get(term),docId);
+						addDocumentToIndex(CommonIndex,termMap.get(term),d.getField(FieldNames.FILEID)[0]);
 					}	
 				}
 			}
 		} catch (Exception e) {
 			System.out.println("exception is from " + e);
 			return;
-
 		}
 
 	}
 
 	
-	public void  addDocumentToIndex(TreeMap<Integer,Postings> IndType,int termId,int docId){
+	public int getTermNo(){
+		return termId;
+	}
+	
+	public void  addDocumentToIndex(TreeMap<Integer,Postings> IndType,int termId,String docId){
 		//check if term_id exists
 		if(IndType.containsKey(termId)){
 			//increase term frequency 
@@ -275,7 +290,9 @@ public class IndexWriter implements java.io.Serializable {
 			out = new ObjectOutputStream(fileOut);
 			out.writeObject(this.TermIndex);
 			
-			
+			fileOut = new FileOutputStream(new File(indexDir+ File.separator+"TermMap"));
+			out = new ObjectOutputStream(fileOut);
+			out.writeObject(this.termMap);
 			
 			out.close();
 			fileOut.close();
@@ -284,6 +301,8 @@ public class IndexWriter implements java.io.Serializable {
 		}catch(IOException e){
 			System.out.println("i have exception in close "+e);
 		}
+		
+		
 		
 	}
 }

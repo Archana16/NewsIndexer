@@ -69,8 +69,8 @@ public class TokenStream implements Iterator<Token> {
 	}
 
 	public void resetPrevious() {
-		System.out.println("previous was " + previous + " and now it is "
-				+ previousLoop);
+		//System.out.println("previous was " + previous + " and now it is "
+			//	+ previousLoop);
 		previousLoop = previous;
 
 	}
@@ -100,14 +100,14 @@ public class TokenStream implements Iterator<Token> {
 	}
 
 	public void setTempIndex() {
-		System.out.println("earlier temp index was " + tempIndex + " index ="
-				+ index);
+		//System.out.println("earlier temp index was " + tempIndex + " index ="
+			//	+ index);
 		tempIndex = index;
 
 	}
 
 	public void setIndexCurrent() {
-		System.out.println(" index was " + index + " temp index =" + tempIndex);
+		//System.out.println(" index was " + index + " temp index =" + tempIndex);
 		index = tempIndex;
 		previous = index - 2;
 	}
@@ -121,13 +121,22 @@ public class TokenStream implements Iterator<Token> {
 	public void remove() {
 		// TODO YOU MUST IMPLEMENT THIS
 		current = -9;
+		try{
 		if (index != -1) {
 			if (index > 0 && index != mylist.size()) {
+				//if(!mylist.get(index-1).getTermText().isEmpty())
+				//System.out.println("removed = "+mylist.get(index-1));
 				mylist.remove(index - 1);
 				index = index - 1;
 			} else if (index == mylist.size() && mylist.size() != 0) {
+				//if(!mylist.get(index-1).getTermText().isEmpty())
+					//System.out.println("removed = "+mylist.get(index-1));
 				mylist.remove(--index);
+				
 			}
+		}
+		}catch(Exception e){
+			System.out.println("exception is from remove "+e);
 		}
 	}
 

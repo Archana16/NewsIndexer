@@ -44,7 +44,8 @@ public class IndexerTest {
 				"increase in home sales in july", "july new home sales rise"};
 		int len = strs.length;
 		Document d;
-		String dir = System.getProperty("INDEX.DIR");
+		String dir = "/home/pritika/Downloads/dfl";
+				//System.getProperty("INDEX.DIR");
 		IndexWriter writer = new IndexWriter(dir); //set this beforehand
 		for (int i = 0; i < len; i++) {
 			d = new Document();
@@ -58,7 +59,7 @@ public class IndexerTest {
 
 	@Before
 	public final void before() {
-		reader = new IndexReader(System.getProperty("INDEX.DIR"), IndexType.TERM);
+		reader = new IndexReader("/home/pritika/Downloads/dfl", IndexType.TERM);
 	}
 	
 	/**
@@ -82,6 +83,7 @@ public class IndexerTest {
 	 */
 	@Test
 	public final void testGetPostings() {
+		//String query = getAnalyzedTerm("home");
 		String query = getAnalyzedTerm("home");
 		Map<String, Integer> map = reader.getPostings(query);
 		assertNotNull(map);
