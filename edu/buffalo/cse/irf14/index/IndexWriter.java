@@ -93,6 +93,7 @@ public class IndexWriter implements java.io.Serializable {
 		noOfDocs++;
 			String docName = d.getField(FieldNames.FILEID)[0];
 		for (FieldNames dir : FieldNames.values()) {
+		
 			try {
 				TreeMap<Integer , Postings> CommonIndex ;
 				if(dir.equals(FieldNames.AUTHOR)){

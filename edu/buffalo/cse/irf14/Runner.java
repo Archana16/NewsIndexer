@@ -164,13 +164,13 @@ public class Runner {
 				}
 			*/
 			int x=0;
-			/*for (Entry<String,Integer> entry : termMap.entrySet()) {
+			for (Entry<String,Integer> entry : termMap.entrySet()) {
 			 	System.out.println(i++ +"  key was "+entry.getKey());
 			 	writer_1.println(x++ +" "+entry.getKey());
 			    //entry.getValue().printDocmap();
 			 	//if(x>1000)
 			 		//break;
-			}*/
+			}
 			System.out.println("--------------------no of terms="+writer.getTermNo());
 			writer.close();
 		}catch(FileNotFoundException e){

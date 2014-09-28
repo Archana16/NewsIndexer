@@ -16,7 +16,7 @@ public class AccentFilter extends TokenFilter {
 	@Override
 	public boolean increment() throws TokenizerException {
 		// TODO Auto-generated method stub
-		System.out.println("Accent filter function increment");
+		//System.out.println("Accent filter function increment");
 		Token token  = tStreamOld.next();
 		String word  = token.getTermText().trim();
 		String new_word;

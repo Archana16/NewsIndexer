@@ -25,7 +25,7 @@ public class PlaceAnalyzer implements Analyzer {
 			}
 			tStreamOld.reset();
 		}
-		System.out.println("---After all filters for Place---");
+		//System.out.println("---After all filters for Place---");
 		return false;
 	}
 	@Override

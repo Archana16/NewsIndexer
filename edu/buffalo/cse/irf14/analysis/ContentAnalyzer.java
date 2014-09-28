@@ -28,7 +28,7 @@ public class ContentAnalyzer implements Analyzer {
 			}
 			tStreamOld.reset();
 		}
-		System.out.println("---After all filters for Content---");
+		//System.out.println("---After all filters for Content---");
 		return false;
 	}
 
