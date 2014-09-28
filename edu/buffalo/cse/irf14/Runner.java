@@ -44,12 +44,14 @@ public class Runner {
 		String indexDir = args[1];
 		//more? idk! 
 		*/
+
 		
 		long startTime = System.currentTimeMillis(); // Get the start Time
 	    long endTime = 0;
 	    System.out.println( "starttime = "+startTime);
 		
 	    String ipDir = "/home/pritika/Downloads/news_training/training";
+	    //String ipDir = "/home/archana/workspace-ir/IR/training";
 		String indexDir = "/home/pritika/Downloads/dfl";
 		IndexWriter writer = new IndexWriter(indexDir);
 		Document d = null;
@@ -61,6 +63,54 @@ public class Runner {
 		File dir;
 		
 		int i=0;
+	
+
+		/*int i =0,j=0;
+		for(String cat :catDirectories)
+			{
+			dir = new File(ipDir+ File.separator+ cat);
+			files = dir.list();
+			
+			if (files == null)
+				continue;
+			System.out.println(ipDir+ File.separator+ cat);
+			i++;
+			dir = new File(ipDir+ File.separator+ cat);
+			files = dir.list();
+			for(String f :files)
+			{
+			System.out.println(f);
+			j++;
+			}
+			System.out.println(j);
+			}
+		System.out.println(i);*/
+		
+		
+		
+		//uncomment out this for one file
+/*		try{
+			try {
+				d = Parser.parse("/home/archana/workspace-ir/IR/training/dfl/0007273");
+				System.out.println(d.getField(FieldNames.FILEID)[0]);
+				System.out.println(d.getField(FieldNames.CATEGORY)[0]);
+				System.out.println(d.getField(FieldNames.PLACE)[0]);
+				System.out.println(d.getField(FieldNames.AUTHOR)[0]);
+				System.out.println(d.getField(FieldNames.AUTHORORG)[0]);
+				System.out.println(d.getField(FieldNames.NEWSDATE)[0]);
+				//writer.addDocument(d);
+			} catch (Exception e) {//ParserException
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}catch(Exception e){
+			
+			e.printStackTrace();
+		}*/
+		
+		//uncomment this for whole directory
+		
 		try{
 			for (String cat : catDirectories) {
 				dir = new File(ipDir+ File.separator+ cat);
@@ -71,6 +121,7 @@ public class Runner {
 					continue;
 				int j=0;
 				for (String f : files) {
+
 					try{
 						try {
 							d = Parser.parse(dir.getAbsolutePath() + File.separator +f);
@@ -86,38 +137,23 @@ public class Runner {
 					}
 					
 				}
-			
+				
 			}
 		 i=0;
 			/*TreeMap <Integer,Postings>docMap = IndexWriter.getIndex(IndexType.TERM);
 			for (Entry<Integer,Postings> entry : docMap.entrySet()) {
 				 	System.out.println(i++ +"  key was "+entry.getKey());
-				    //entry.getValue().printDocmap();
-				}
+				    //entry.getValue().printDocmap();*/
+			//	}
 			i =0;
 			TreeMap <String,Integer>termMap = writer.getTermMap();
-			
-			try{
-				//PrintWriter out = new PrintWriter(new FileWriter("/home/pritika/Downloads/terms.txt"));
-				for (Entry<String,Integer> entry : termMap.entrySet()) {
-				 	System.out.print(i +"  key was "+entry.getKey()+"\t\t");
-				    //entry.getValue().printDocmap();
-				 		//out.println(i++ +"  key was "+entry.getKey());
-					}
-			//	out.close();
-			}catch(Exception e){
-				System.out.println("writing to file "+e);
-			}
-			*/
-			
-			
-			 endTime = System.currentTimeMillis(); //Get the end Time
+			endTime = System.currentTimeMillis(); //Get the end Time
 			 System.out.println("total files ="+Parser.getNoOfFiles()+" time ="+(endTime-startTime));
 			 writer.close();
-		
-		}catch(Exception e){//use indexerexception instead
-			e.printStackTrace();
+		}catch(IndexerException e){
+			 
+			}
 		}
-		
-		}
-}
+	}
+
+

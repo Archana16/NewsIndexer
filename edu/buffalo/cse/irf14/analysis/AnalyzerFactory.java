@@ -21,9 +21,28 @@ public class AnalyzerFactory {
 	 * during instantiation
 	 * @return An instance of the factory
 	 */
+	private static AnalyzerFactory instance;
+
+	private AnalyzerFactory()
+	{
+	System.out.println("AnalyzerFactory(): Initializing Instance");
+	}
+	
 	public static AnalyzerFactory getInstance() {
 		//TODO: YOU NEED TO IMPLEMENT THIS METHOD
-		return null;
+		if (instance == null)
+		{
+			synchronized(AnalyzerFactory.class)
+			{
+				if (instance == null)
+				{
+					System.out.println("getInstance(): First time getInstance was invoked!");
+					instance = new AnalyzerFactory();
+				}
+			}            
+		}
+
+		return instance;
 	}
 	
 	/**
@@ -39,6 +58,7 @@ public class AnalyzerFactory {
 	 */
 	public Analyzer getAnalyzerForField(FieldNames name, TokenStream stream) {
 		//TODO : YOU NEED TO IMPLEMENT THIS METHOD
+		
 		return null;
 	}
 }

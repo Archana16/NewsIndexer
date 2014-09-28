@@ -235,7 +235,7 @@ public class TokenStream implements Iterator<Token> {
 			break;
 		}
 		case 4 :{
-			//only year and combined time and combined AD
+			//only year and combined time and combined AD //numeric filter
 			if(index >0){
 				--index;
 				//mylist.remove(--index);
@@ -251,8 +251,18 @@ public class TokenStream implements Iterator<Token> {
 			}
 			break;
 		}
+		case 6:{
+			//numeric filter
+			if(index >0){
+				--index;
+				 mylist.remove(index);
+				//++index;
+			}
+			break;
 		}
 		
 	}
-	
-}
+		
+	}
+	}
+

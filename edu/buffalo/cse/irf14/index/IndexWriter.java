@@ -10,6 +10,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,6 +18,9 @@ import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeMap;
+
+
+import edu.buffalo.cse.irf14.analysis.AnalyzerFactory;
 
 import edu.buffalo.cse.irf14.analysis.Token;
 import edu.buffalo.cse.irf14.analysis.TokenFilter;
@@ -76,9 +80,9 @@ public class IndexWriter implements java.io.Serializable {
 			String docName = d.getField(FieldNames.CATEGORY)[0]+"_"+d.getField(FieldNames.FILEID)[0];
 			int docId = docMap.get(docName);
 			Tokenizer t = new Tokenizer();
-			
+			//AnalyzerFactory AnalyzerInstance = AnalyzerFactory.getInstance();
+			//Analyzer obj = (Analyzer)AnalyzerInstance.getAnalyzerForField(dir, tstream);
 			for (FieldNames dir : FieldNames.values()) {
-				
 				if( d.getField(dir) != null && !dir.equals(FieldNames.NEWSDATE) && !dir.equals(FieldNames.FILEID)){
 					
 					TreeMap<Integer , Postings> CommonIndex ;
@@ -106,7 +110,7 @@ public class IndexWriter implements java.io.Serializable {
 					 	filter.increment(); 
 				}
 				 
-				 //System.out.println("------------------------------after accent-------------------------");
+				// System.out.println("------------------------------after accent-------------------------");
 				 tstream.reset();
 				 
 				 filter = factory.getFilterByType(TokenFilterType.SYMBOL,tstream); 
@@ -116,7 +120,14 @@ public class IndexWriter implements java.io.Serializable {
 				} 
 				 //System.out.println("------------------------------after symbol-------------------------"); 
 				  
-				  
+				 
+				 filter = factory.getFilterByType(TokenFilterType.NUMERIC,tstream);
+				 tstream.reset();
+				 while (tstream.hasNext()){
+						filter.increment();
+				 	}
+				//System.out.println("------------------------------after numeric filter-------------------------");
+				
 				 tstream.reset();
 				
 				filter = factory.getFilterByType(TokenFilterType.SPECIALCHARS,tstream);
@@ -136,7 +147,7 @@ public class IndexWriter implements java.io.Serializable {
 					 filter.increment(); 
 				 }
 				 
-				 //System.out.println("------------------------------after stemmer-------------------------"); 
+				// System.out.println("------------------------------after stemmer-------------------------"); 
 				
 				  
 				  
@@ -150,8 +161,9 @@ public class IndexWriter implements java.io.Serializable {
 				}
 
 				System.out.println("------------------------------after datefilter-------------------------");
+				*/
 				
-				*/tstream.reset();
+				tstream.reset();
 				filter = factory.getFilterByType(TokenFilterType.CAPITALIZATION, tstream);
 				tstream.reset();
 				while (tstream.hasNext()) {
@@ -168,7 +180,7 @@ public class IndexWriter implements java.io.Serializable {
 				}
 				  
 				  
-				 //System.out.println("------------------------------after stopword-------------------------"); 
+				// System.out.println("------------------------------after stopword-------------------------"); 
 				 tstream.reset();
 				
 				//add term,if not present, in term index and then add it in the main index
@@ -179,15 +191,15 @@ public class IndexWriter implements java.io.Serializable {
 						if(!termMap.containsKey(term)){
 							termMap.put(term,termId++);
 							System.out.println(id++ +" word = "+term);
+							if(termId>5000)
+								break;
 						}	
 						addDocumentToIndex(CommonIndex,termMap.get(term),docId);
 					}	
 				}
 			}
-	
-
 		} catch (Exception e) {
-			System.out.println("exception is " + e);
+			System.out.println("exception is from " + e);
 			return;
 
 		}
