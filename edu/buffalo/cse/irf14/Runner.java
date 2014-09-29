@@ -165,7 +165,7 @@ public class Runner {
 			*/
 			int x=0;
 			for (Entry<String,Integer> entry : termMap.entrySet()) {
-			 	System.out.println(i++ +"  key was "+entry.getKey());
+			 	//System.out.println(i++ +"  key was "+entry.getKey());
 			 	writer_1.println(x++ +" "+entry.getKey());
 			    //entry.getValue().printDocmap();
 			 	//if(x>1000)

@@ -52,6 +52,7 @@ public class IndexWriter implements java.io.Serializable {
 	transient String indexDir;
 	static int noOfDocs=0;
 	private static TreeMap<String , Integer> termMap = new TreeMap<String, Integer>();
+	private static TreeMap<Integer , String> reverseTermMap = new TreeMap<Integer , String>();
 	private static TreeMap<Integer , Postings> TermIndex = new TreeMap<Integer , Postings>();
 	private static TreeMap<Integer , Postings> AuthorIndex = new TreeMap<Integer , Postings>();
 	private static TreeMap<Integer , Postings> CategoryIndex = new TreeMap<Integer , Postings>();
@@ -129,7 +130,9 @@ public class IndexWriter implements java.io.Serializable {
 						String term = stream.next().toString().trim();
 						//System.out.println("word = "+term);
 						if(!termMap.containsKey(term)){
+							reverseTermMap.put(termId, term);
 							termMap.put(term,termId++);
+							
 							//System.out.println(id++ +" word = "+term);
 						}else{
 							//System.out.println("already had = "+term+" at= "+termMap.get(term));
@@ -199,7 +202,9 @@ public class IndexWriter implements java.io.Serializable {
 		return termMap;
 	} 
 	
-	
+	public static TreeMap<Integer,String> getReverseTermMap(){
+		return reverseTermMap;
+	}
 	
 	public static TreeMap<Integer,Postings> getIndex(IndexType type){
 		if(type.equals(IndexType.AUTHOR))
@@ -245,6 +250,10 @@ public class IndexWriter implements java.io.Serializable {
 			fileOut = new FileOutputStream(new File(indexDir+ File.separator+"TermMap"));
 			out = new ObjectOutputStream(fileOut);
 			out.writeObject(this.termMap);
+			
+			fileOut = new FileOutputStream(new File(indexDir+ File.separator+"ReverseTermMap"));
+			out = new ObjectOutputStream(fileOut);
+			out.writeObject(this.reverseTermMap);
 			
 			out.close();
 			fileOut.close();
