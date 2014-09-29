@@ -87,7 +87,7 @@ public class IndexWriter implements java.io.Serializable {
 	public void addDocument(Document d) throws IndexerException {
 
 		//with analyzer
-		Tokenizer tknizer = new Tokenizer();
+	/*	Tokenizer tknizer = new Tokenizer();
 		AnalyzerFactory fact = AnalyzerFactory.getInstance();
 
 		noOfDocs++;
@@ -143,9 +143,9 @@ public class IndexWriter implements java.io.Serializable {
 				e.printStackTrace();
 			}
 		}
-	}
+	}*/
 		//previous one
-	/*	try {
+		try {
 			Tokenizer t = new Tokenizer();
 			for (FieldNames dir : FieldNames.values()) {
 					System.out.println(dir + " = " + d.getField(dir)[0]);
@@ -167,7 +167,8 @@ public class IndexWriter implements java.io.Serializable {
 		}catch (Exception e) {
 				System.out.println("exception is " + e);
 
-			}*/
+			}
+	}
 				
 	
 	public int getTermNo(){

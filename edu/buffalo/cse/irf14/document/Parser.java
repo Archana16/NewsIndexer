@@ -61,16 +61,15 @@ public class Parser {
 	public static String checkDate(String str) {
 		String[] words = str.split(" ");
 		String date = "";
-		for (int i = 0; i < words.length; i++) {
+		for (int i = 1; i < words.length; i++) {
 			if (list.contains(words[i].toLowerCase())) {
 				date = words[i];
 				if(i < words.length){
-					if (words[i + 1].matches("^\\d{1,2},?$") ||words[i + 1].matches("^\\d{4},?$"))
+					if (words[i + 1].matches("^\\d{1,2}[.,]?$") ||words[i + 1].matches("^\\d{4}[.,]?$"))
 						date += " " + words[i + 1];
-					
 				}
 				if(i >0){
-					if (words[i -1].matches("^\\d{1,2},?$") ||words[i -1].matches("^\\d{4},?$"))
+					if (words[i -1].matches("^\\d{1,2}[.,]?$") ||words[i -1].matches("^\\d{4}[.,]?$"))
 						date = words[i -1]+" "+date;
 				}
 				if (date.contains(","))
@@ -91,55 +90,56 @@ public class Parser {
 		if(Date.isEmpty())
 			Date= checkDate(content);
 		while (words.hasNext()) {
-			
 			String token = words.next();
-			if(token.isEmpty())
-				continue;
-			//System.out.println("in while rue "+token);
-			if (testAllUpperCase(token)) {
-				if (token.contains("<AUTHOR>")) {
-					token = words.next();
-					while (true) {
-						
-						if (token.contains("</AUTHOR>")) {
-							break;
-						} else {
+			if(!token.isEmpty()){
+				if ((token.contains("<AUTHOR>")||token.contains("<author>"))) {
+					token = words.hasNext() ? words.next() : "";
+					while (words.hasNext()) {
+						if (token.contains("</AUTHOR>")|| token.contains("</author>")) {
+							token = token.replace("</AUTHOR>", "");
+							token = token.replace("</author>", "");
 							Author +=token+" ";
-							token = words.hasNext() ? words.next() : "";
+							break;
+						} else{
+							Author +=token+" ";
+							token = words.next();
 						}
 						
 					}
-					
 					String[] parts = Author.split(",");
 					if (parts.length > 1) {
-						Author = parts[0];
-						AuthorOrg = parts[1];
-
+						Author = parts[0].replace("By", "");
+						Author = Author.trim();
+						AuthorOrg = parts[1].trim();
 					}
 
-				} else{
-					if(Place.isEmpty()){
-						if (token.charAt(token.length() - 1) == ',') 
-							Place = token;
-						else{
-							Place = token;
-							String place1 ="";
-							while (words.hasNext()) {
-								place1 = words.next();
-								if (place1.matches("^\\w+,$") && !Place.isEmpty())
-									break;
-								else
-									Place += " " + place1;
-								}
-							}
+				} 
+				else if(testAllUpperCase(token) && Place.isEmpty()) {
+					if (token.matches("^\\w+,$")) {
+						Place = token;
+					} else {
+						Place = token;
+						String place1 = "";
+						while (words.hasNext()) {
+							place1 = words.next();
+							Place += " " + place1;
+							if (place1.matches("^\\w+,$"))
+								break;
 						}
+
 					}
-				}
+					}
+			}
+				
 		}
 		//System.out.println("out of while");
+		Place = (Place.isEmpty())?null:Place;
 		d.setField(FieldNames.PLACE, Place);
+		Author = (Author.isEmpty())?null:Author;
 		d.setField(FieldNames.AUTHOR, Author);
+		AuthorOrg = (AuthorOrg.isEmpty())?null:AuthorOrg;
 		d.setField(FieldNames.AUTHORORG, AuthorOrg);
+		Date = (Date.isEmpty())?null:Date;
 		d.setField(FieldNames.NEWSDATE, Date);
 		//System.out.println("\t\tit is dne");
 		words.close();

@@ -49,14 +49,13 @@ public class Runner {
 		//more? idk! 
 		*/
 
-		
 		long startTime = System.currentTimeMillis(); // Get the start Time
 	    long endTime = 0;
 	    System.out.println( "starttime = "+startTime);
 		
 	    //String ipDir = "/home/pritika/Downloads/news_training/training";
-	    String ipDir = "/home/pritika/Downloads/news_training/training/";
-		String indexDir = "/home/pritika/Downloads/dfl";
+	    String ipDir = "/home/archana/workspace-ir/IR/training/";
+		String indexDir = "/home/archana/Downloads/dfl";
 		IndexWriter writer = new IndexWriter(indexDir);
 		Document d = null;
 		//IndexWriter writer = new IndexWriter(indexDir);
@@ -93,9 +92,9 @@ public class Runner {
 		
 		
 		//uncomment out this for one file
-		try{
+	/*	try{
 			try {
-				d = Parser.parse("/home/archana/workspace-ir/IR/training/dfl/0007273");
+				d = Parser.parse("/home/archana/workspace-ir/IR/training/money-supply/0004283");
 				System.out.println(d.getField(FieldNames.FILEID)[0]);
 				System.out.println(d.getField(FieldNames.CATEGORY)[0]);
 				System.out.println(d.getField(FieldNames.PLACE)[0]);
@@ -111,10 +110,10 @@ public class Runner {
 		}catch(Exception e){
 			
 			e.printStackTrace();
-		}
+		}*/
 		
 		//uncomment this for whole directory
-/*		 i=0;
+		 i=0;
 		try{
 			for (String cat : catDirectories) {
 				dir = new File(ipDir+ File.separator+ cat);
@@ -148,12 +147,6 @@ public class Runner {
 				
 			}
 	
-			TreeMap <Integer,Postings>docMap = IndexWriter.getIndex(IndexType.TERM);
-			for (Entry<Integer,Postings> entry : docMap.entrySet()) {
-				 	System.out.println(i++ +"  key was "+entry.getKey());
-				    //entry.getValue().printDocmap();
-			//	}
-			i =0;
 			TreeMap <String,Integer>termMap = writer.getTermMap();
 		try{	
 			PrintWriter writer_1 = new PrintWriter("/home/pritika/Downloads/sp.txt");
@@ -182,8 +175,8 @@ public class Runner {
 		}catch(IndexerException e){
 			 
 			}
-		}*/
+		}
 	}
-}
+
 
 
