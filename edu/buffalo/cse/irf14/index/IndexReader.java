@@ -6,6 +6,10 @@ package edu.buffalo.cse.irf14.index;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -27,7 +31,8 @@ import edu.buffalo.cse.irf14.document.Parser;
 public class IndexReader {
 	
 	private TreeMap<Integer , Postings> map;
-	private static TreeMap<String , Integer> termMap ;
+	private TreeMap<String , Integer> termMap ;
+	private TreeMap<Integer,String> reverseTermMap ;
 	//private static TreeMap<String , Integer> docMap;
 	//private static TreeMap<Integer,String> reverseDocMap ;
 	
@@ -50,7 +55,9 @@ public class IndexReader {
 			in = new ObjectInputStream(file);
 			termMap = (TreeMap<String,Integer>)in.readObject();
 			
-			
+			file = new FileInputStream(indexDir+ File.separator+"ReverseTermMap");
+			in = new ObjectInputStream(file);
+			reverseTermMap = (TreeMap<Integer,String>)in.readObject();
 			
 			in.close();
 		}catch(Exception e){
@@ -94,7 +101,7 @@ public class IndexReader {
 	 */
 	public int getTotalKeyTerms() {
 		//TODO : YOU MUST IMPLEMENT THIS
-		System.out.println("--------------------------total key terms="+map.size());
+		
 		return map.size();
 	}
 	
@@ -105,7 +112,7 @@ public class IndexReader {
 	 */
 	public int getTotalValueTerms() {
 		//TODO: YOU MUST IMPLEMENT THIS
-		System.out.println("-------total val terms ="+IndexWriter.getNoOfDocs());
+		
 		return IndexWriter.getNoOfDocs();
 	}
 	
@@ -119,7 +126,7 @@ public class IndexReader {
 	 */
 	public Map<String, Integer> getPostings(String term) {
 		String query = getAnalyzedTerm(term);
-		System.out.println("query is "+query);
+		
 		if(termMap.containsKey(query)){
 			Postings p = map.get(termMap.get(term));
 			Map<String,Integer> postingMap = p.getDocMap();
@@ -160,7 +167,31 @@ public class IndexReader {
 	 */
 	public List<String> getTopK(int k) {
 		//TODO YOU MUST IMPLEMENT THIS
-		return null;
+		if(k<1)
+			return null;
+		List<Integer> myList = new ArrayList<Integer>();
+		List<String> returnList = new ArrayList<String>();
+		List<Integer>freq = new ArrayList<Integer>();;
+		for (Entry<Integer,Postings> entry : map.entrySet()) {
+			myList.add(entry.getValue().getTermFrequency());
+		}
+		for(int i =0;i<k;i++){
+			int a=Collections.max(myList,null);
+			freq.add(a);
+			myList.remove((Integer)a);
+			
+		}
+		
+			//System.out.println("key  ="+entry.getKey()+" val ="+reverseTermMap.get(entry.getKey()));
+			for(int i =0;i<k ;i++){
+				for (Entry<Integer,Postings> entry : map.entrySet()) {
+					if(entry.getValue().getTermFrequency()== freq.get(i)){
+						returnList.add(returnList.size(),reverseTermMap.get(entry.getKey()));
+					}
+				}
+			}
+		
+		return returnList;
 	}
 	
 	/**

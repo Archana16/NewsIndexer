@@ -17,6 +17,9 @@ public class Postings implements java.io.Serializable{
 		}
 		// TODO Auto-generated constructor stub
 		
+		public int getTermFrequency(){
+			return termFrequency;
+		}
 		
 		public void printDocmap(){
 			System.out.println("\tdoc frequency = "+docFrequency+" term frequency=" +termFrequency);
