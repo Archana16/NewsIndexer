@@ -234,16 +234,18 @@ public class TokenStream implements Iterator<Token> {
 			if(index >2 && index <mylist.size()){
 				mylist.remove(--index);
 				mylist.remove(--index);
+				if(index>0 && index < mylist.size())
 				mylist.set( index, t );
 			}
 			break;
 		}
 		case 2 :{
 			//second month
-			if(index >1 && index <mylist.size()){
+			if(index >1 && index < mylist.size()){
 				index++;
 				mylist.remove(--index);
-				//mylist.remove(--index);
+				mylist.remove(--index);
+				if(index>0 && index < mylist.size())
 				mylist.set( index, t );
 			}
 			break;
@@ -254,6 +256,7 @@ public class TokenStream implements Iterator<Token> {
 			if(index >2 && index <mylist.size()){
 				--index;
 				mylist.remove(--index);
+				if(index>0 && index < mylist.size())
 				mylist.set( index, t );
 			}
 			break;
@@ -263,6 +266,7 @@ public class TokenStream implements Iterator<Token> {
 			if(index >1 && index <mylist.size()){
 				--index;
 				//mylist.remove(--index);
+				if(index>0 && index < mylist.size())
 				mylist.set( index, t );
 			}
 			break;
@@ -271,6 +275,7 @@ public class TokenStream implements Iterator<Token> {
 			//time
 			if(index >1 && index <mylist.size()){
 				mylist.remove(--index);
+				if(index>0 && index < mylist.size())
 				mylist.set( index, t );
 			}
 			break;

@@ -25,7 +25,7 @@ public class AnalyzerFactory {
 	private static AnalyzerFactory instance;
 
 	private AnalyzerFactory() {
-		System.out.println("AnalyzerFactory(): Initializing Instance");
+		//System.out.println("AnalyzerFactory(): Initializing Instance");
 	}
 
 	public static AnalyzerFactory getInstance() {
@@ -33,7 +33,7 @@ public class AnalyzerFactory {
 		if (instance == null) {
 			synchronized (AnalyzerFactory.class) {
 				if (instance == null) {
-					System.out.println("getInstance(): First time getInstance was invoked!");
+					//System.out.println("getInstance(): First time getInstance was invoked!");
 					instance = new AnalyzerFactory();
 				}
 			}

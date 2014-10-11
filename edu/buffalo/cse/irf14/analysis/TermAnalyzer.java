@@ -28,7 +28,7 @@ public class TermAnalyzer implements Analyzer {
 			}
 			tStreamOld.reset();
 		}
-		System.out.println("---After all filters for Terms---");
+		
 		return false;
 	}
 

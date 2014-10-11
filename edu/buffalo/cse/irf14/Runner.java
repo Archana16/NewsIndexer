@@ -44,18 +44,18 @@ public class Runner {
 	public static void main(String[] args) {
 
 		//String dir = System.getProperty("INDEX.DIR");
-		/*String ipDir = args[0];
-		String indexDir = args[1];
+		//String ipDir = args[0];
+		// indexDir = args[1];
 		//more? idk! 
-		*/
+		
 
 		long startTime = System.currentTimeMillis(); // Get the start Time
 	    long endTime = 0;
 	    System.out.println( "starttime = "+startTime);
 		
-	    //String ipDir = "/home/pritika/Downloads/news_training/training";
-	    String ipDir = "/home/archana/workspace-ir/IR/training/";
-		String indexDir = "/home/archana/Downloads/dfl";
+	    String ipDir = "/home/pritika/Downloads/news_training/training";
+	   // String ipDir = "/home/archana/workspace-ir/IR/training/";
+		String indexDir = "/home/pritika/Downloads/dfl";
 		IndexWriter writer = new IndexWriter(indexDir);
 		Document d = null;
 		//IndexWriter writer = new IndexWriter(indexDir);
@@ -65,8 +65,7 @@ public class Runner {
 		String[] files;
 		File dir;
 		
-		int i=0;
-	
+		
 
 		/*int i =0,j=0;
 		for(String cat :catDirectories)
@@ -113,7 +112,7 @@ public class Runner {
 		}*/
 		
 		//uncomment this for whole directory
-		 i=0;
+		
 		try{
 			for (String cat : catDirectories) {
 				dir = new File(ipDir+ File.separator+ cat);
@@ -122,17 +121,16 @@ public class Runner {
 				
 				if (files == null)
 					continue;
-				int j=0;
+				
 				for (String f : files) {
 					
 					try{
 						try {
 							
 							d = Parser.parse(dir.getAbsolutePath() + File.separator +f);
-							i++;
 							
-							//System.out.println("\t"+j++ + "parsed ="+dir.getAbsolutePath() + File.separator +f);
-							//writer.addDocument(d);
+							
+							writer.addDocument(d);
 							
 							//System.out.println(d.getField(FieldNames.FILEID)[0]+" and "+d.getField(FieldNames.CATEGORY)[0]);
 						}catch (Exception e) {//ParserException
@@ -147,28 +145,8 @@ public class Runner {
 				
 			}
 	
-			TreeMap <String,Integer>termMap = writer.getTermMap();
-		try{	
-			PrintWriter writer_1 = new PrintWriter("/home/pritika/Downloads/sp.txt");
-			TreeMap <Integer,Postings>docMap = IndexWriter.getIndex(IndexType.TERM);
-			for (Entry<Integer,Postings> entry : docMap.entrySet()) {
-				 	System.out.println(i++ +"  key was "+entry.getKey());
-				    entry.getValue().printDocmap();
-				}
 			
-			int x=0;
-			for (Entry<String,Integer> entry : termMap.entrySet()) {
-			 	//System.out.println(i++ +"  key was "+entry.getKey());
-			 	writer_1.println(x++ +" "+entry.getKey());
-			    //entry.getValue().printDocmap();
-			 	//if(x>1000)
-			 		//break;
-			}
-			System.out.println("--------------------no of terms="+writer.getTermNo());
-			writer.close();
-		}catch(FileNotFoundException e){
-			System.out.println("file not found");
-		}	
+		
 			endTime = System.currentTimeMillis(); //Get the end Time
 			 System.out.println("total files ="+Parser.getNoOfFiles()+" time ="+(endTime-startTime));
 			 writer.close();

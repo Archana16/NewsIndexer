@@ -44,6 +44,8 @@ public class Tokenizer {
 	 */
 	public TokenStream consume(String str) throws TokenizerException {
 
+		if(str==null)
+			return null;
 		String []initialTokens = str.replaceAll("\\s+", " ").split(delim);
 		ArrayList<Token> stringList = new ArrayList<Token>();
 		for(String s : initialTokens){

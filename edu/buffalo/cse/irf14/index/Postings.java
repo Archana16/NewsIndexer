@@ -22,7 +22,7 @@ public class Postings implements java.io.Serializable{
 		}
 		
 		public void printDocmap(){
-			System.out.println("\tdoc frequency = "+docFrequency+" term frequency=" +termFrequency);
+			//System.out.println("\tdoc frequency = "+docFrequency+" term frequency=" +termFrequency);
 			Collection entrySet = docToFreqMap.entrySet();
 			Iterator it = entrySet.iterator();
 			 while(it.hasNext()){
@@ -30,7 +30,7 @@ public class Postings implements java.io.Serializable{
 		 	    	System.out.print("\t"+it.next()+" ");
 		 	    	
 		 	   }
-			 System.out.println("\n--------------------------------------------------------------------------------------------------------------\n");
+			// System.out.println("\n--------------------------------------------------------------------------------------------------------------\n");
 		}
 		
 		public TreeMap<String, Integer> getDocMap(){

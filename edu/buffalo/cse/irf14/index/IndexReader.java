@@ -30,9 +30,9 @@ import edu.buffalo.cse.irf14.document.Parser;
  */
 public class IndexReader {
 	
-	private TreeMap<Integer , Postings> map;
-	private TreeMap<String , Integer> termMap ;
-	private TreeMap<Integer,String> reverseTermMap ;
+	private HashMap<Integer , Postings> map;
+	private HashMap<String , Integer> termMap ;
+	private HashMap<Integer,String> reverseTermMap ;
 	//private static TreeMap<String , Integer> docMap;
 	//private static TreeMap<Integer,String> reverseDocMap ;
 	
@@ -53,11 +53,11 @@ public class IndexReader {
 		try{
 			file = new FileInputStream(indexDir+ File.separator+"TermMap");
 			in = new ObjectInputStream(file);
-			termMap = (TreeMap<String,Integer>)in.readObject();
+			termMap = (HashMap<String,Integer>)in.readObject();
 			
 			file = new FileInputStream(indexDir+ File.separator+"ReverseTermMap");
 			in = new ObjectInputStream(file);
-			reverseTermMap = (TreeMap<Integer,String>)in.readObject();
+			reverseTermMap = (HashMap<Integer,String>)in.readObject();
 			
 			in.close();
 		}catch(Exception e){
@@ -77,7 +77,7 @@ public class IndexReader {
 			inMain = new ObjectInputStream(fileInMain);
 			try{
 				int i =0;
-				map= (TreeMap<Integer,Postings>)inMain.readObject();
+				map= (HashMap<Integer,Postings>)inMain.readObject();
 				for (Entry<Integer,Postings> entry : map.entrySet()) {
 				 	System.out.println(i++ +"  key was "+entry.getKey());
 				}	
@@ -101,7 +101,7 @@ public class IndexReader {
 	 */
 	public int getTotalKeyTerms() {
 		//TODO : YOU MUST IMPLEMENT THIS
-		
+		System.out.println("map size is"+map.size());
 		return map.size();
 	}
 	
@@ -182,7 +182,7 @@ public class IndexReader {
 			
 		}
 		
-			//System.out.println("key  ="+entry.getKey()+" val ="+reverseTermMap.get(entry.getKey()));
+		//	System.out.println("key  ="+entry.getKey()+" val ="+reverseTermMap.get(entry.getKey()));
 			for(int i =0;i<k ;i++){
 				for (Entry<Integer,Postings> entry : map.entrySet()) {
 					if(entry.getValue().getTermFrequency()== freq.get(i)){

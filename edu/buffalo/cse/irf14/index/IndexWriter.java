@@ -9,7 +9,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
 import edu.buffalo.cse.irf14.analysis.Analyzer;
 
 import java.io.File;
@@ -21,7 +20,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.TreeMap;
 
 import java.util.Map.Entry;
 import java.util.ArrayList;
@@ -36,7 +34,6 @@ import edu.buffalo.cse.irf14.analysis.TokenFilterFactory;
 import edu.buffalo.cse.irf14.analysis.TokenizerException;
 import edu.buffalo.cse.irf14.document.Document;
 import edu.buffalo.cse.irf14.document.FieldNames;
-
 import edu.buffalo.cse.irf14.document.ParserException;
 
 import java.util.HashMap;
@@ -51,12 +48,12 @@ public class IndexWriter implements java.io.Serializable {
 	int i =0;
 	transient String indexDir;
 	static int noOfDocs=0;
-	private static TreeMap<String , Integer> termMap = new TreeMap<String, Integer>();
-	private static TreeMap<Integer , String> reverseTermMap = new TreeMap<Integer , String>();
-	private static TreeMap<Integer , Postings> TermIndex = new TreeMap<Integer , Postings>();
-	private static TreeMap<Integer , Postings> AuthorIndex = new TreeMap<Integer , Postings>();
-	private static TreeMap<Integer , Postings> CategoryIndex = new TreeMap<Integer , Postings>();
-	private static TreeMap<Integer , Postings> PlaceIndex = new TreeMap<Integer , Postings>();
+	private static HashMap<String , Integer> termMap = new HashMap<String, Integer>();
+	private static HashMap<Integer , String> reverseTermMap = new HashMap<Integer , String>();
+	private static HashMap<Integer , Postings> TermIndex = new HashMap<Integer , Postings>();
+	private static HashMap<Integer , Postings> AuthorIndex = new HashMap<Integer , Postings>();
+	private static HashMap<Integer , Postings> CategoryIndex = new HashMap<Integer , Postings>();
+	private static HashMap<Integer , Postings> PlaceIndex = new HashMap<Integer , Postings>();
 	
 	/**
 	 * Default constructor
@@ -88,7 +85,7 @@ public class IndexWriter implements java.io.Serializable {
 	public void addDocument(Document d) throws IndexerException {
 
 		//with analyzer
-	/*	Tokenizer tknizer = new Tokenizer();
+		Tokenizer tknizer = new Tokenizer();
 		AnalyzerFactory fact = AnalyzerFactory.getInstance();
 
 		noOfDocs++;
@@ -96,7 +93,7 @@ public class IndexWriter implements java.io.Serializable {
 		for (FieldNames dir : FieldNames.values()) {
 		
 			try {
-				TreeMap<Integer , Postings> CommonIndex ;
+				HashMap<Integer , Postings> CommonIndex ;
 				if(dir.equals(FieldNames.AUTHOR)){
 					CommonIndex = AuthorIndex;
 				}else if(dir.equals(FieldNames.CATEGORY)){
@@ -108,81 +105,82 @@ public class IndexWriter implements java.io.Serializable {
 				}
 				
 				//System.out.println("field for doc is "+d.getField(dir)[0]+" and dir is "+dir);
-				if(dir == FieldNames.FILEID){
+				if(dir.equals(FieldNames.FILEID)){
 					//System.out.println("yes it is field id");
 					continue;
 					
 				}
-				//System.out.println("after continue  "+dir+" and val is "+d.getField(dir) );
+					//System.out.println("after continue  "+dir+" and val is "+d.getField(dir) );
 				if(d.getField(dir) == null){
 					//System.out.println("dude it is null for "+dir+" continuing");
 					continue;
-				}TokenStream stream = tknizer.consume(d.getField(dir)[0]);
+				}
+				if(d.getField(dir)[0]==null)
+					continue;
+				TokenStream stream = tknizer.consume(d.getField(dir)[0]);
 				//System.out.println("stream is "+stream);
 				if(stream.hasNext()){
-					//System.out.println("yeh it has next");
-				Analyzer analyzer = fact.getAnalyzerForField(dir, stream);
-				while (analyzer.increment()) {
-					
-				}
-				stream.reset();
-				 while (stream.hasNext()){
-						String term = stream.next().toString().trim();
-						//System.out.println("word = "+term);
-						if(!termMap.containsKey(term)){
-							reverseTermMap.put(termId, term);
-							termMap.put(term,termId++);
-							
-							//System.out.println(id++ +" word = "+term);
-						}else{
-							//System.out.println("already had = "+term+" at= "+termMap.get(term));
+						//System.out.println("yeh it has next");
+					Analyzer analyzer = fact.getAnalyzerForField(dir, stream);
+					while (analyzer.increment()) {
+						
+					}
+					stream.reset();
+					 while (stream.hasNext()){
+							String term = stream.next().toString().trim();
+							//System.out.println("word = "+term);
+							if(!termMap.containsKey(term)){
+								reverseTermMap.put(termId, term);
+								termMap.put(term,termId++);
+								
+								//System.out.println(id++ +" word = "+term);
+							}else{
+								//System.out.println("already had = "+term+" at= "+termMap.get(term));
+							}	
+							addDocumentToIndex(CommonIndex,termMap.get(term),d.getField(FieldNames.FILEID)[0]);
 						}	
-						addDocumentToIndex(CommonIndex,termMap.get(term),d.getField(FieldNames.FILEID)[0]);
-					}	
 				}
 			}
 			catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				//System.out.println("it is here "+e.getStackTrace());
 			}
 		}
-	}*/
+	}
 		//previous one
-		try {
+	/*	try {
 			Tokenizer t = new Tokenizer();
 			for (FieldNames dir : FieldNames.values()) {
-					System.out.println(dir + " = " + d.getField(dir)[0]);
+					
 					TokenStream tstream = t.consume(d.getField(dir)[0]);
 					TokenFilterFactory factory = TokenFilterFactory.getInstance();
 					TokenFilter filter;
-
-					
-					  filter =factory.getFilterByType(TokenFilterType.DATE,tstream); 
+					filter =factory.getFilterByType(TokenFilterType.DATE,tstream); 
 					  tstream.reset(); 
 					  while (tstream.hasNext()) {
 					  filter.increment(); 
 					  }
-					  System.out.println("----------------after stopword------------");
+					 
 					  tstream.reset(); 
-					  while(tstream.hasNext())
-						  System.out.println("next is "+tstream.next());
+					 
 			}
 		}catch (Exception e) {
 				System.out.println("exception is " + e);
 
 			}
 	}
-				
+		*/		
 	
 	public int getTermNo(){
 		return termId;
 	}
 	
-	public void  addDocumentToIndex(TreeMap<Integer,Postings> IndType,int termId,String docId){
+	public void  addDocumentToIndex(HashMap<Integer, Postings> commonIndex,int termId,String docId){
 		//check if term_id exists
-		if(IndType.containsKey(termId)){
+		if(commonIndex.containsKey(termId)){
 			//increase term frequency 
-			Postings  p = (Postings)IndType.get(termId);
+			Postings  p = (Postings)commonIndex.get(termId);
 			if(p.hasDoc(docId)){
 				p.incrementExistingDoc(docId);
 			}else{
@@ -191,7 +189,7 @@ public class IndexWriter implements java.io.Serializable {
 		}else{
 			//create new key in final posting
 			Postings p = new Postings();
-			IndType.put(termId,p);
+			commonIndex.put(termId,p);
 			p.addDocument(docId);
 		}
 		
@@ -199,15 +197,15 @@ public class IndexWriter implements java.io.Serializable {
 	
 	
 	
-	public static TreeMap<String,Integer> getTermMap(){
+	public static HashMap<String,Integer> getTermMap(){
 		return termMap;
 	} 
 	
-	public static TreeMap<Integer,String> getReverseTermMap(){
+	public static HashMap<Integer,String> getReverseTermMap(){
 		return reverseTermMap;
 	}
 	
-	public static TreeMap<Integer,Postings> getIndex(IndexType type){
+	public static HashMap<Integer,Postings> getIndex(IndexType type){
 		if(type.equals(IndexType.AUTHOR))
 			return AuthorIndex;
 		else if(type.equals(IndexType.CATEGORY))

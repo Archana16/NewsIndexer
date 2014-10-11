@@ -23,7 +23,7 @@ public class TokenFilterFactory {
 	private static TokenFilterFactory instance;
 
 	private TokenFilterFactory() {
-		System.out.println("AnalyzerFactory(): Initializing Instance");
+		//System.out.println("AnalyzerFactory(): Initializing Instance");
 	}
 	
 	public static TokenFilterFactory getInstance() {
@@ -31,7 +31,7 @@ public class TokenFilterFactory {
 		if (instance == null) {
 			synchronized (TokenFilterFactory.class) {
 				if (instance == null) {
-					System.out.println("getInstance(): First time getInstance was invoked!");
+					//System.out.println("getInstance(): First time getInstance was invoked!");
 					instance = new TokenFilterFactory();
 				}
 			}

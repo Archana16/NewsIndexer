@@ -133,13 +133,13 @@ public class Parser {
 				
 		}
 		//System.out.println("out of while");
-		Place = (Place.isEmpty())?null:Place;
+		//Place = (Place.isEmpty())?null:Place;
 		d.setField(FieldNames.PLACE, Place);
-		Author = (Author.isEmpty())?null:Author;
+		//Author = (Author.isEmpty())?null:Author;
 		d.setField(FieldNames.AUTHOR, Author);
-		AuthorOrg = (AuthorOrg.isEmpty())?null:AuthorOrg;
+		//AuthorOrg = (AuthorOrg.isEmpty())?null:AuthorOrg;
 		d.setField(FieldNames.AUTHORORG, AuthorOrg);
-		Date = (Date.isEmpty())?null:Date;
+		//Date = (Date.isEmpty())?null:Date;
 		d.setField(FieldNames.NEWSDATE, Date);
 		//System.out.println("\t\tit is dne");
 		words.close();
@@ -147,8 +147,8 @@ public class Parser {
 
 	public static Document parse(String filename) throws ParserException {
 
-		System.out.println("Parsing begins");
-
+	//	System.out.println("Parsing begins");
+		docMapIndex++;
 		if (filename == null || filename == "") {
 			throw new ParserException("Filename is empty");
 		}
@@ -186,7 +186,7 @@ public class Parser {
 				e.printStackTrace();
 			}
 
-			System.out.println("Parsing ends");
+//			System.out.println("Parsing ends");
 
 			return d;
 		}

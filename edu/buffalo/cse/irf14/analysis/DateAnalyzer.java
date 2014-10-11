@@ -24,7 +24,7 @@ public class DateAnalyzer implements Analyzer {
 			}
 			tStreamOld.reset();
 		}
-		System.out.println("---After all filters for Terms---");
+		//System.out.println("---After all filters for Terms---");
 		return false;
 	}
 
