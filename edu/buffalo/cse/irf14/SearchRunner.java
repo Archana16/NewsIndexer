@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * Main class to run the searcher.
@@ -33,6 +34,23 @@ public class SearchRunner {
 	 */
 	public void query(String userQuery, ScoringModel model) {
 		//TODO: IMPLEMENT THIS METHOD
+		String query = getQueryFromString(userQuery);
+	}
+	
+	String getQueryFromString(String userQuery){
+		String s = "a";
+		try {
+		    String[] splitArray = userQuery.split("\\s+");
+		    for(String word : splitArray){
+		    	if(word.contains(":"))
+		    		word = "Term:"+word;
+		    }
+		} catch (PatternSyntaxException ex) {
+		    
+		}
+		
+		
+		return s;
 	}
 	
 	/**

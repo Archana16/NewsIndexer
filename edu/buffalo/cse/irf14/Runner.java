@@ -150,6 +150,7 @@ public class Runner {
 			endTime = System.currentTimeMillis(); //Get the end Time
 			 System.out.println("total files ="+Parser.getNoOfFiles()+" time ="+(endTime-startTime));
 			 writer.close();
+			 
 		}catch(IndexerException e){
 			 
 			}
