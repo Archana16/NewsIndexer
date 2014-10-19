@@ -34,24 +34,10 @@ public class SearchRunner {
 	 */
 	public void query(String userQuery, ScoringModel model) {
 		//TODO: IMPLEMENT THIS METHOD
-		String query = getQueryFromString(userQuery);
+		
 	}
 	
-	String getQueryFromString(String userQuery){
-		String s = "a";
-		try {
-		    String[] splitArray = userQuery.split("\\s+");
-		    for(String word : splitArray){
-		    	if(word.contains(":"))
-		    		word = "Term:"+word;
-		    }
-		} catch (PatternSyntaxException ex) {
-		    
-		}
-		
-		
-		return s;
-	}
+	
 	
 	/**
 	 * Method to execute queries in E mode
