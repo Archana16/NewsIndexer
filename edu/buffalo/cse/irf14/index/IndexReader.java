@@ -78,9 +78,9 @@ public class IndexReader {
 			try{
 				int i =0;
 				map= (HashMap<Integer,Postings>)inMain.readObject();
-				for (Entry<Integer,Postings> entry : map.entrySet()) {
+				/*for (Entry<Integer,Postings> entry : map.entrySet()) {
 				 	System.out.println(i++ +"  key was "+entry.getKey());
-				}	
+				}*/	
 			}catch(ClassNotFoundException e){
 				System.out.println("out obje"+e);
 			}
@@ -180,8 +180,7 @@ public class IndexReader {
 			freq.add(a);
 			myList.remove((Integer)a);
 			
-		}
-		
+		}	
 		//	System.out.println("key  ="+entry.getKey()+" val ="+reverseTermMap.get(entry.getKey()));
 			for(int i =0;i<k ;i++){
 				for (Entry<Integer,Postings> entry : map.entrySet()) {

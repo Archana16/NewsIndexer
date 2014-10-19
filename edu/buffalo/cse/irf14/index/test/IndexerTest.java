@@ -58,7 +58,7 @@ public class IndexerTest {
 
 	@Before
 	public final void before() {
-		reader = new IndexReader("/home/pritika/Downloads/dfl", IndexType.TERM);
+		reader = new IndexReader("/home/archana/Downloads/dfl", IndexType.TERM);
 	}
 	
 	/**
