@@ -16,9 +16,12 @@ public class Postings implements java.io.Serializable{
 			docToFreqMap = new TreeMap<String, Integer>();
 		}
 		// TODO Auto-generated constructor stub
-		
+
 		public int getTermFrequency(){
 			return termFrequency;
+		}
+		public int getDocFreq(){
+			return docFrequency;
 		}
 		
 		public void printDocmap(){

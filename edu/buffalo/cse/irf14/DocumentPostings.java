@@ -9,6 +9,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
+import java.util.TreeMap;
+import java.util.HashMap;
+import java.lang.Math;
 
 import edu.buffalo.cse.irf14.index.IndexReader;
 import edu.buffalo.cse.irf14.index.IndexType;
@@ -47,9 +50,11 @@ class Postings {
 
 public class DocumentPostings {
 	public static Postings p1 = new Postings();
+	public static HashMap<String, Map<String, Integer>> TermDoc = new  HashMap<String, Map<String, Integer>>();
+
 
 	public static void main(String[] args) {
-		String query = "{ [ Term:season OR Term:price ] AND Term:report }";
+		String query = "{ [ Term:season OR Term:price ] AND <Term:report> }";
 		String terms[] = query.split(" ");
 		// Stack for terms
 		Stack<Collection<String>> values = new Stack<Collection<String>>();
@@ -79,6 +84,7 @@ public class DocumentPostings {
 				operation.pop();
 			}else if (!operatorList.contains(terms[i].toUpperCase())) {
 				System.out.print("an operand, so push into values stack\n");
+				
 				values.push(getPosting(terms[i]));
 			} else if (operatorList.contains(terms[i].toUpperCase())) {
 				System.out.print("operator, push onto operator stack\n");
@@ -89,6 +95,11 @@ public class DocumentPostings {
 		  while (!operation.empty())
 	            values.push(applyOp(operation.pop(), values.pop(), values.pop()));
 		values.pop();
+		getSquareRootOfEufactor();
+		calculateTheFinalVal();
+		for (Map.Entry<String,Double> entry :docScore.entrySet()){
+			System.out.println(" val is  "+entry.getKey()+" ="+entry.getValue());
+		}	
 	}
 
 	public static IndexType getType(String type) {
@@ -106,20 +117,80 @@ public class DocumentPostings {
 	}
 
 	public static Collection<String> getPosting(String str) {
-		Collection<String> Set = Collections.emptySet();
+		Collection Set = Collections.emptySet();
 		str = str.replaceAll("[<,>]", "");
 		System.out.println("terms->" + str);
 		String terms[] = str.split(":");
 		System.out.println("posting for " + terms[0] + "-" + terms[1]);
-		Map<String, Integer> map = p1.getReader(getType(terms[0])).getPostings(
-				terms[1]);
-		Set = map.keySet();
+		Map<String, Integer> map = p1.getReader(getType(terms[0])).getPostings(terms[1]); 
+		p1.getReader(getType(terms[0])).populateTfIdf(terms[1]);
+		Set = map.entrySet();
 		Iterator it = Set.iterator();
 		System.out.println("posting list");
 		while (it.hasNext()) {
 			System.out.print("\t" + it.next() + " ");
 		}
+		int sum =0;
+		for (String key : map.keySet()) {
+		    System.out.println(key + ":" + map.get(key));
+		}
+		
+		for (Map.Entry<String, Integer> entry:map.entrySet()){
+			String docName = entry.getKey();
+			int freqInDoc = entry.getValue();
+			setEucaladianFactorForDoc(docName,freqInDoc);
+		}
+		TermDoc.put(str, map);
 		return Set;
+	}
+	
+	
+	
+	private static HashMap<String,Double> EuFactor = new HashMap<String,Double>();
+	private static void setEucaladianFactorForDoc(String docName,double freqInDoc){
+		if(EuFactor.containsKey(docName)){
+			EuFactor.put(docName, EuFactor.get(docName)+(freqInDoc*freqInDoc));
+		}else
+			EuFactor.put(docName, freqInDoc);
+	}
+	
+	private static void getSquareRootOfEufactor(){
+		for (Map.Entry<String, Double> entry:EuFactor.entrySet()){
+			EuFactor.put(entry.getKey(), Math.sqrt(entry.getValue()));
+		}
+	}
+	
+	private static HashMap <String,Double> docScore= new HashMap<String,Double>();
+	
+	public static void calculateTheFinalVal(){
+		for (Map.Entry<String,Map<String,Integer>> entry :TermDoc.entrySet()){
+			String terms[] = entry.getKey().split(":");
+			double idf = p1.getReader(getType(terms[0])).getIdfForTerm(terms[1]);
+			Map<String,Integer> docMap = entry.getValue();
+			for (Map.Entry<String, Integer> entry1: docMap.entrySet()){
+				String docId = entry1.getKey();
+				double getEuFactorForDoc = EuFactor.get(docId);
+				double tfIdf = (entry1.getValue()/getEuFactorForDoc)*entry1.getValue()*idf;
+				if(docScore.containsKey(docId))
+					docScore.put(docId,docScore.get(docId)+tfIdf);
+				else	
+					docScore.put(docId,tfIdf);
+				
+			}
+			
+		}
+		
+	}
+	
+	public static void normalizeDoc(String[] terms){
+		for (String key : TermDoc.keySet()) {
+		    System.out.println(key + ":" + TermDoc.get(key));
+		    for(String term: terms){
+		    	
+		    }
+		}
+		/*sum+=Math.pow(Integer.parseInt(map.get(key).toString()),2);
+		Double Ed = Math.sqrt(sum);*/
 	}
 
 	public static Collection<String> applyOp(String op, Collection<String> s1,
