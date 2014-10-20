@@ -33,6 +33,7 @@ public class IndexReader {
 	private HashMap<Integer , Postings> map;
 	private HashMap<String , Integer> termMap ;
 	private HashMap<Integer,String> reverseTermMap ;
+	private HashMap<String, Double> TfIdfMap;
 	//private static TreeMap<String , Integer> docMap;
 	//private static TreeMap<Integer,String> reverseDocMap ;
 	
@@ -49,6 +50,7 @@ public class IndexReader {
 		ObjectInputStream in,inMain; 
 		String fileName;
 		System.out.println("index dir i got is"+indexDir);
+		TfIdfMap =new HashMap<String, Double>();
 		//get term and doc dictionary
 		try{
 			file = new FileInputStream(indexDir+ File.separator+"TermMap");
@@ -94,6 +96,7 @@ public class IndexReader {
 		
 	}
 	
+	
 	/**
 	 * Get total number of terms from the "key" dictionary associated with this 
 	 * index. A postings list is always created against the "key" dictionary
@@ -104,7 +107,16 @@ public class IndexReader {
 		System.out.println("map size is"+map.size());
 		return map.size();
 	}
+	public void populateTfIdf(String term){
+			double df=getDocFrequency(term);
+			double N= getTotalKeyTerms();
+			double idf = Math.log10(N/df);
+			TfIdfMap.put(term, idf);
+	}
 	
+	public double getIdfForTerm(String term){
+		return TfIdfMap.get(term);
+	}
 	/**
 	 * Get total number of terms from the "value" dictionary associated with this 
 	 * index. A postings list is always created with the "value" dictionary
@@ -135,7 +147,14 @@ public class IndexReader {
 		
 		return null;
 	}
-	
+	public int getDocFrequency(String term) {
+		String query = getAnalyzedTerm(term);
+		if(termMap.containsKey(query)){
+			Postings p = map.get(termMap.get(term));
+			return p.getDocFreq(); 
+		}
+		return 0;
+	}
 	
 	private static String getAnalyzedTerm(String string) {
 		Tokenizer tknizer = new Tokenizer();
