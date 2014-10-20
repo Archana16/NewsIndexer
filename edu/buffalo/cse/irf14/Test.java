@@ -23,7 +23,7 @@ public class Test {
 		int i=0;
 		//for(String raw :q_arr){
 			System.out.println(q_arr[7]);
-			c.getQueryFromString(q_arr[7]);
+			c.getQueryFromString(q_arr[7],"OR");
 			System.out.println(output[7]);
 		//}	
 	}
@@ -34,10 +34,10 @@ class Check{
 	
 	public void query(String userQuery, ScoringModel model) {
 		//TODO: IMPLEMENT THIS METHOD
-		String query = getQueryFromString(userQuery);
+		String query = getQueryFromString(userQuery,"OR");
 	}
 	
-	String getQueryFromString(String userQuery){
+	String getQueryFromString(String userQuery, String defaultOperator){
 		String str = "";
 		Stack<String> op_st = new Stack<String>();
 		Stack<String> val_st = new Stack<String>();
@@ -81,7 +81,7 @@ class Check{
 					}else{
 						//check for  terms like pritika mehta girl and convert it into (term:pritika OR term:mehta OR term:girl) 
 						if(prev_was_word ==1 ){
-							op_st.push("OR");
+							op_st.push(defaultOperator);
 							if(prev_got_left_brace ==0){
 								val_st.push(" ("+val_st.pop());
 								prev_got_left_brace =1;

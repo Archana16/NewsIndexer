@@ -3,6 +3,7 @@ package edu.buffalo.cse.irf14;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Collections;
@@ -12,42 +13,38 @@ import java.util.Stack;
 
 import edu.buffalo.cse.irf14.index.IndexReader;
 import edu.buffalo.cse.irf14.index.IndexType;
+import edu.buffalo.cse.irf14.index.IndexWriter;
 
-class Postings {
 
-	private IndexReader AuthorIndex;
-	private IndexReader PlaceIndex;
-	private IndexReader CategoryIndex;
-	private IndexReader TermIndex;
-	private static String indexDir;
-
-	public Postings() {
-		System.out.printf("creating all readers");
-		indexDir = "/home/pritika/Downloads/dfl";
-		AuthorIndex = new IndexReader(indexDir, IndexType.AUTHOR);
-		PlaceIndex = new IndexReader(indexDir, IndexType.PLACE);
-		CategoryIndex = new IndexReader(indexDir, IndexType.CATEGORY);
-		TermIndex = new IndexReader(indexDir, IndexType.TERM);
-		System.out.printf("exiting");
+class CalBM25{
+	private HashMap<String , Double> docScoreMap = new HashMap<String , Double>();
+	public void calculateScoreForDoc(String doc,int noOfDocs,int freqInDoc,int docLength,double averageDocLength,int N){
+		double val = (N-noOfDocs+0.5)/(noOfDocs+0.5);
+		double idf = Math.log10(val);
+		double k = 1.6;
+		double b =0.75;
+		double  score = idf *((freqInDoc*(k+1))/(freqInDoc+k*(1-b+(b*docLength)/averageDocLength))); 
+		System.out.println("doc is "+doc+" score is "+score);
+		insertInDocScoremap(doc,score);
 	}
-
-	public IndexReader getReader(IndexType type) {
-		switch (type) {
-		case AUTHOR:
-			return AuthorIndex;
-		case PLACE:
-			return PlaceIndex;
-		case CATEGORY:
-			return CategoryIndex;
-		default:
-			return TermIndex;
-		}
+	
+	public void insertInDocScoremap(String doc,double score){
+		if(docScoreMap.containsKey(doc))
+			docScoreMap.put(doc, score+docScoreMap.get(doc));
+		else	
+			docScoreMap.put(doc, score);
+		
 	}
+	public HashMap<String , Double> getDocToScoreMap(){
+		return docScoreMap;
+	}
+	
 }
 
-public class DocumentPostings {
-	public static Postings p1 = new Postings();
 
+public class BM25 {
+	public static Postings p1 = new Postings();
+	
 	public static void main(String[] args) {
 		String query = "{ [ Term:season OR Term:price ] AND Term:report }";
 		String terms[] = query.split(" ");
@@ -79,6 +76,7 @@ public class DocumentPostings {
 				operation.pop();
 			}else if (!operatorList.contains(terms[i].toUpperCase())) {
 				System.out.print("an operand, so push into values stack\n");
+				
 				values.push(getPosting(terms[i]));
 			} else if (operatorList.contains(terms[i].toUpperCase())) {
 				System.out.print("operator, push onto operator stack\n");
@@ -111,14 +109,29 @@ public class DocumentPostings {
 		System.out.println("terms->" + str);
 		String terms[] = str.split(":");
 		System.out.println("posting for " + terms[0] + "-" + terms[1]);
-		Map<String, Integer> map = p1.getReader(getType(terms[0])).getPostings(
-				terms[1]);
+		IndexReader ir = p1.getReader(getType(terms[0]));
+		Map<String, Integer> map = ir.getPostings(terms[1]);
 		Set = map.keySet();
+		CalBM25 bm = new CalBM25();
+		int noOfDocs = Set.size();
 		Iterator it = Set.iterator();
 		System.out.println("posting list");
 		while (it.hasNext()) {
 			System.out.print("\t" + it.next() + " ");
+			//String doc = it.next();
 		}
+		
+		for (Map.Entry<String, Integer> entry : map.entrySet()){
+			String docName = entry.getKey();
+			int freqInDoc = entry.getValue();
+			int docLength = ir.getTotalFreqInDoc(docName);
+			double averageDocLength= ir.getAverageDocLength();
+			int N = ir.getTotalKeyTerms();
+			bm.calculateScoreForDoc(docName,noOfDocs,freqInDoc,docLength,averageDocLength,N);
+
+	}
+
+
 		return Set;
 	}
 

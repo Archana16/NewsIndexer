@@ -33,6 +33,7 @@ public class IndexReader {
 	private HashMap<Integer , Postings> map;
 	private HashMap<String , Integer> termMap ;
 	private HashMap<Integer,String> reverseTermMap ;
+	private HashMap<String , Integer> docFreqMap;
 	//private static TreeMap<String , Integer> docMap;
 	//private static TreeMap<Integer,String> reverseDocMap ;
 	
@@ -58,6 +59,10 @@ public class IndexReader {
 			file = new FileInputStream(indexDir+ File.separator+"ReverseTermMap");
 			in = new ObjectInputStream(file);
 			reverseTermMap = (HashMap<Integer,String>)in.readObject();
+			
+			file = new FileInputStream(indexDir+ File.separator+"DocFreqMap");
+			in = new ObjectInputStream(file);
+			docFreqMap = (HashMap<String,Integer> )in.readObject();
 			
 			in.close();
 		}catch(Exception e){
@@ -99,9 +104,23 @@ public class IndexReader {
 	 * index. A postings list is always created against the "key" dictionary
 	 * @return The total number of terms
 	 */
+	
+	public int getTotalFreqInDoc(String docName){
+		return docFreqMap.get(docName);
+	}
+	
+	
+	public double getAverageDocLength(){
+		double sum = 0.0;
+		for (float f : docFreqMap.values()) {
+		    sum += f;
+		}
+		int noOfDocs  = docFreqMap.size(); 
+		return sum/noOfDocs;
+	}
 	public int getTotalKeyTerms() {
 		//TODO : YOU MUST IMPLEMENT THIS
-		System.out.println("map size is"+map.size());
+	
 		return map.size();
 	}
 	
@@ -112,7 +131,6 @@ public class IndexReader {
 	 */
 	public int getTotalValueTerms() {
 		//TODO: YOU MUST IMPLEMENT THIS
-		
 		return IndexWriter.getNoOfDocs();
 	}
 	

@@ -1,10 +1,19 @@
 package edu.buffalo.cse.irf14;
 
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.regex.PatternSyntaxException;
+
+import edu.buffalo.cse.irf14.query.QueryParser;
+import edu.buffalo.cse.irf14.query.Query;
+import edu.buffalo.cse.irf14.query.Reader;
+import edu.buffalo.cse.irf14.query.PostingList;
 
 /**
  * Main class to run the searcher.
@@ -13,7 +22,7 @@ import java.util.regex.PatternSyntaxException;
  *
  */
 public class SearchRunner {
-	public enum ScoringModel {TFIDF, OKAPI};
+	public enum ScoringModel {TFIDF,OKAPI};
 	
 	/**
 	 * Default (and only public) constuctor
@@ -34,6 +43,20 @@ public class SearchRunner {
 	 */
 	public void query(String userQuery, ScoringModel model) {
 		//TODO: IMPLEMENT THIS METHOD
+
+		
+		
+		Scanner in = new Scanner(System.in);
+		String query,mod;
+		System.out.println("Enter a string");
+	     query = in.nextLine();
+	     System.out.println("Enter coring model");
+	     mod = in.nextLine();
+	     QueryParser parser = new QueryParser();
+	     Query Q = parser.parse(userQuery, "OR");
+		Reader Readers = new Reader();
+		PostingList DocumentList = new PostingList(userQuery, Readers, model);
+	    	 
 		
 	}
 	
@@ -45,6 +68,20 @@ public class SearchRunner {
 	 */
 	public void query(File queryFile) {
 		//TODO: IMPLEMENT THIS METHOD
+		try{
+			String str = ""; 
+			QueryParser parser = new QueryParser();
+			FileReader reader = new FileReader(queryFile);
+			BufferedReader in = new BufferedReader(reader);
+			while ((str = in.readLine()) != null) {
+				Query Q = parser.parse(str, "OR");
+				query(Q.toString(),ScoringModel.TFIDF);
+				query(Q.toString(),ScoringModel.OKAPI);
+			}
+		}catch(Exception e){
+			
+		}
+		
 	}
 	
 	/**

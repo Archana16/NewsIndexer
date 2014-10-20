@@ -32,6 +32,8 @@ public class TokenStream implements Iterator<Token> {
 		previousLoop = -2;
 		current = -1;
 	}
+	
+	
 
 	/**
 	 * Method that checks if there is any Token left in the stream with regards

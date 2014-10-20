@@ -11,6 +11,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import edu.buffalo.cse.irf14.analysis.Analyzer;
 
+import java.awt.List;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,10 +20,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
-
 import java.util.Map.Entry;
 import java.util.ArrayList;
+import java.util.Set;
 
 import edu.buffalo.cse.irf14.analysis.AnalyzerFactory;
 import edu.buffalo.cse.irf14.analysis.Token;
@@ -49,6 +51,7 @@ public class IndexWriter implements java.io.Serializable {
 	transient String indexDir;
 	static int noOfDocs=0;
 	private static HashMap<String , Integer> termMap = new HashMap<String, Integer>();
+	private static HashMap<String , Integer> docFreqMap = new HashMap<String, Integer>();
 	private static HashMap<Integer , String> reverseTermMap = new HashMap<Integer , String>();
 	private static HashMap<Integer , Postings> TermIndex = new HashMap<Integer , Postings>();
 	private static HashMap<Integer , Postings> AuthorIndex = new HashMap<Integer , Postings>();
@@ -83,13 +86,15 @@ public class IndexWriter implements java.io.Serializable {
 	 */
 	int id=0;
 	public void addDocument(Document d) throws IndexerException {
-
+		
+		int termsInDoc =0;
 		//with analyzer
 		Tokenizer tknizer = new Tokenizer();
 		AnalyzerFactory fact = AnalyzerFactory.getInstance();
-
+		
 		noOfDocs++;
 			String docName = d.getField(FieldNames.FILEID)[0];
+			//add no of documents
 		for (FieldNames dir : FieldNames.values()) {
 		
 			try {
@@ -126,8 +131,13 @@ public class IndexWriter implements java.io.Serializable {
 						
 					}
 					stream.reset();
+					
+					
+					
+					
 					 while (stream.hasNext()){
 							String term = stream.next().toString().trim();
+							termsInDoc++;
 							//System.out.println("word = "+term);
 							if(!termMap.containsKey(term)){
 								reverseTermMap.put(termId, term);
@@ -136,9 +146,13 @@ public class IndexWriter implements java.io.Serializable {
 								//System.out.println(id++ +" word = "+term);
 							}else{
 								//System.out.println("already had = "+term+" at= "+termMap.get(term));
+								//DocFreqMap.put(d.getField(FieldNames.FILEID)[0]
 							}	
 							addDocumentToIndex(CommonIndex,termMap.get(term),d.getField(FieldNames.FILEID)[0]);
 						}	
+					
+					 
+					 
 				}
 			}
 			catch (Exception e) {
@@ -147,6 +161,8 @@ public class IndexWriter implements java.io.Serializable {
 				//System.out.println("it is here "+e.getStackTrace());
 			}
 		}
+		 //System.out.println(docName+" ="+termsInDoc);
+		 docFreqMap.put(docName, termsInDoc);
 	}
 		//previous one
 	/*	try {
@@ -253,6 +269,10 @@ public class IndexWriter implements java.io.Serializable {
 			fileOut = new FileOutputStream(new File(indexDir+ File.separator+"ReverseTermMap"));
 			out = new ObjectOutputStream(fileOut);
 			out.writeObject(this.reverseTermMap);
+			
+			fileOut = new FileOutputStream(new File(indexDir+ File.separator+"DocFreqMap"));
+			out = new ObjectOutputStream(fileOut);
+			out.writeObject(this.docFreqMap);
 			
 			out.close();
 			fileOut.close();

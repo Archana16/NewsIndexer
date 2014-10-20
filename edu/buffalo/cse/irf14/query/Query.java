@@ -9,8 +9,12 @@ public class Query {
 	/**
 	 * Method to convert given parsed query into string
 	 */
+	private String query;
+	public Query(String q){
+		query = q;
+	}
 	public String toString() {
 		//TODO: YOU MUST IMPLEMENT THIS
-		return null;
+		return query;
 	}
 }
