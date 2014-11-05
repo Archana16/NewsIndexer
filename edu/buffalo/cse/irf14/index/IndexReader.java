@@ -53,7 +53,7 @@ public class IndexReader {
 		FileInputStream file,fileInMain; 
 		ObjectInputStream in,inMain; 
 		String fileName;
-		System.out.println("index dir i got is"+indexDir);
+		
 		TfIdfMap =new HashMap<String, Double>();
 		//get term and doc dictionary
 		try{
@@ -96,7 +96,7 @@ public class IndexReader {
 			}
 			inMain.close();
 		}catch(Exception e){
-			System.out.println("out obje"+e);
+			System.out.println("in index reader out obje  "+e);
 		}
 		
 		
@@ -133,10 +133,12 @@ public class IndexReader {
 			double df=getDocFrequency(term);
 			double N= getTotalKeyTerms();
 			double idf = Math.log10(N/df);
+			
 			TfIdfMap.put(term, idf);
 	}
 	
 	public double getIdfForTerm(String term){
+		
 		return TfIdfMap.get(term);
 	}
 	/**
@@ -160,11 +162,13 @@ public class IndexReader {
 	public Map<String, Integer> getPostings(String term) {
 		String query = getAnalyzedTerm(term);
 		
-		if(termMap.containsKey(query)){
-			Postings p = map.get(termMap.get(term));
+		if(!query.isEmpty() && termMap.containsKey(query)){
+			Postings p = map.get(termMap.get(query));
+			
 			Map<String,Integer> postingMap = p.getDocMap();
 			return postingMap;
 		}
+			
 		
 		return null;
 	}
@@ -189,7 +193,10 @@ public class IndexReader {
 			}
 			
 			stream.reset();
-			return stream.next().toString();
+			if(stream.hasNext())
+				return stream.next().toString();
+			else
+				return "";
 		} catch (TokenizerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

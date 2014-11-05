@@ -10,10 +10,10 @@ public class Reader {
 	private IndexReader TermIndex;
 	private static String indexDir;
 
-	public Reader() {
+	public Reader(String indexDir) {
 		// TODO Auto-generated constructor stub
-		System.out.printf("creating all readers");
-		indexDir = "/home/pritika/Downloads/dfl";
+		
+		this.indexDir = indexDir;
 		AuthorIndex = new IndexReader(indexDir, IndexType.AUTHOR);
 		PlaceIndex = new IndexReader(indexDir, IndexType.PLACE);
 		CategoryIndex = new IndexReader(indexDir, IndexType.CATEGORY);

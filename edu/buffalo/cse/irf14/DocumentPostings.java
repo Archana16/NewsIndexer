@@ -181,7 +181,9 @@ public class DocumentPostings {
 		}
 		
 	}
-	
+	public static HashMap<String, Double> getDocScore(){
+		return docScore;
+	}
 	public static void normalizeDoc(String[] terms){
 		for (String key : TermDoc.keySet()) {
 		    System.out.println(key + ":" + TermDoc.get(key));

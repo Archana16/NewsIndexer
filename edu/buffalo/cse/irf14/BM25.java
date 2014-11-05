@@ -106,20 +106,13 @@ public class BM25 {
 	public static Collection<String> getPosting(String str) {
 		Collection<String> Set = Collections.emptySet();
 		str = str.replaceAll("[<,>]", "");
-		System.out.println("terms->" + str);
 		String terms[] = str.split(":");
-		System.out.println("posting for " + terms[0] + "-" + terms[1]);
 		IndexReader ir = p1.getReader(getType(terms[0]));
 		Map<String, Integer> map = ir.getPostings(terms[1]);
 		Set = map.keySet();
 		CalBM25 bm = new CalBM25();
 		int noOfDocs = Set.size();
 		Iterator it = Set.iterator();
-		System.out.println("posting list");
-		while (it.hasNext()) {
-			System.out.print("\t" + it.next() + " ");
-			//String doc = it.next();
-		}
 		
 		for (Map.Entry<String, Integer> entry : map.entrySet()){
 			String docName = entry.getKey();

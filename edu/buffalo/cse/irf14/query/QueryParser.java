@@ -29,7 +29,7 @@ public class QueryParser {
 		Stack<String> op_st = new Stack<String>();
 		Stack<String> val_st = new Stack<String>();
 		try {
-			String[] splitArray = userQuery.split("\\s+");
+			String[] splitArray = userQuery.trim().split("\\s+");
 			
 			
 			int prev_has_quotes = 0;

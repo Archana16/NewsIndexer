@@ -1,4 +1,5 @@
 package edu.buffalo.cse.irf14;
+import edu.buffalo.cse.irf14.SearchRunner;
 
 
 
@@ -17,15 +18,7 @@ public class Test {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Check c = new Check();
-		String[] q_arr = {"hello","hello dear","\"pritika mehta\"","orange AND yellow","(black OR blue) AND bruises","Author:rushdie NOT jihad","Category:War AND Author:Dutt AND Place:Baghdad AND prisoners detainees rebels","(Love NOT War) AND Category:(movies NOT crime)"  };
-		String []output={"{ Term:hello }","{ Term:hello OR Term:world }\n" ,"{ Term:”hello world” }","{ Term:orange AND Term:yellow }","{ [ Term:black OR Term:blue ] AND Term:bruises }","{ Author:rushdie AND <Term:jihad> }","{ Category:War AND Author:Dutt AND Place:Baghdad AND [ Term:prisoners OR Term:detainees OR Term:rebels ] }", "{ [ Term:Love AND <Term:War> ] AND [ Category:movies AND <Category:crime> ] }"};
-		int i=0;
-		//for(String raw :q_arr){
-			System.out.println(q_arr[7]);
-			c.getQueryFromString(q_arr[7],"OR");
-			System.out.println(output[7]);
-		//}	
+		SearchRunner s = new SearchRunner("/home/pritika/Downloads/dfl","",'Q',System.out);
 	}
 
 }

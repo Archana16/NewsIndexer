@@ -44,8 +44,8 @@ public class Runner {
 	public static void main(String[] args) {
 
 		//String dir = System.getProperty("INDEX.DIR");
-		//String ipDir = args[0];
-		// indexDir = args[1];
+		String ipDir = args[0];
+		String indexDir = args[1];
 		//more? idk! 
 		
 
@@ -53,9 +53,9 @@ public class Runner {
 	    long endTime = 0;
 	    System.out.println( "starttime = "+startTime);
 		
-	    String ipDir = "/home/pritika/Downloads/news_training/training";
+	  // String ipDir = "/home/pritika/Downloads/news_training/training";
 	    //String ipDir = "/home/archana/workspace-ir/IR/training/";
-		String indexDir = "/home/pritika/Downloads/dfl";
+		//String indexDir = "/home/pritika/Downloads/dfl";
 		//String indexDir = "/home/archana/Downloads/dfl";
 		IndexWriter writer = new IndexWriter(indexDir);
 		Document d = null;
