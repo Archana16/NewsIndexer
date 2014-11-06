@@ -18,7 +18,7 @@ public class Test {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		SearchRunner s = new SearchRunner("/home/pritika/Downloads/dfl","",'Q',System.out);
+		SearchRunner s = new SearchRunner("/home/archana/Downloads/dfl","",'Q',System.out);
 	}
 
 }

@@ -106,16 +106,14 @@ public class SearchRunner {
 	     Reader Readers = new Reader(getIndexDir());
 	     PostingList DocumentList = new PostingList(Q.toString(), Readers, model);
 	     Collection <String> FinalSet = DocumentList.getList();
+	     
 	     HashMap<String, Double> scoreMap = new  HashMap<String, Double>();
 	     if(model.equals(ScoringModel.TFIDF)){
-	    	 scoreMap = DocumentList.getDocScore();
+	    	 DocumentList.calculateScore(FinalSet);
 	     }
 	     else if(model.equals(ScoringModel.OKAPI)){
 	    	 scoreMap = DocumentList.getDocScoreMap(); 
 	     }
-	     
-	    
-	     
 	     Iterator it1;
 	 	it1 = FinalSet.iterator();
 	 	while (it1.hasNext()) {
