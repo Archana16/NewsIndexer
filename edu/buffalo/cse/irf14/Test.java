@@ -20,8 +20,11 @@ public class Test {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		SearchRunner s = new SearchRunner("/home/pritika/Downloads/dfl","",'E',System.out);
-		File f = new File("/home/pritika/Downloads/check.txt");
+
+		SearchRunner s = new SearchRunner("/home/archana/Downloads/dfl","",'Q',System.out);
+		File f = new File("/home/archana/Downloads/check.txt");
+		//SearchRunner s = new SearchRunner("/home/pritika/Downloads/dfl","",'E',System.out);
+		//File f = new File("/home/pritika/Downloads/check.txt");
 		s. query(f);
 	}
 

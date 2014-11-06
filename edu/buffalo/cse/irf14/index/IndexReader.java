@@ -173,15 +173,13 @@ public class IndexReader {
 		return null;
 	}
 	public int getDocFrequency(String term) {
-		String query = getAnalyzedTerm(term);
-		if(termMap.containsKey(query)){
-			//System.out.println("it contains this term "+query);
-			Postings p = map.get(termMap.get(query));
-			//System.out.println("get doc freq i "+p);
-			if(p ==null)
-				return 0;
-			else
+		String query =null;
+		if(term!=null){
+			query = getAnalyzedTerm(term);
+			if(termMap.containsKey(query)){
+				Postings p = map.get(termMap.get(query));
 				return p.getDocFreq(); 
+			}
 		}
 		return 0;
 	}

@@ -8,7 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
@@ -53,10 +55,11 @@ public class Runner {
 	    long endTime = 0;
 	    System.out.println( "starttime = "+startTime);
 		
-	   String ipDir = "/home/pritika/Downloads/news_training/training";
-	    //String ipDir = "/home/archana/workspace-ir/IR/training/";
-	String indexDir = "/home/pritika/Downloads/dfl";
-		//String indexDir = "/home/archana/Downloads/dfl";
+
+	  // String ipDir = "/home/pritika/Downloads/news_training/training";
+	    String ipDir = "/home/archana/workspace-ir/IR/training/";
+		//String indexDir = "/home/pritika/Downloads/dfl";
+		String indexDir = "/home/archana/Downloads/dfl";
 		IndexWriter writer = new IndexWriter(indexDir);
 		Document d = null;
 		//IndexWriter writer = new IndexWriter(indexDir);
@@ -129,10 +132,9 @@ public class Runner {
 						try {
 							
 							d = Parser.parse(dir.getAbsolutePath() + File.separator +f);
-							
-							
 							writer.addDocument(d);
-							
+							//HashMap<String, Double> length = writer.getLength();
+							//System.out.println("length of doc "+d+" "+length.get(d));
 							//System.out.println(d.getField(FieldNames.FILEID)[0]+" and "+d.getField(FieldNames.CATEGORY)[0]);
 						}catch (Exception e) {//ParserException
 							// TODO Auto-generated catch block
