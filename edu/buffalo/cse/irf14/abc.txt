@@ -1,0 +1,4 @@
+numQueries=3
+Q_1A63C:{hello world}
+Q_6V87S:{Category:oil AND place:Dubai AND ( price OR cost )}
+Q_4K66L:{long query with several words}

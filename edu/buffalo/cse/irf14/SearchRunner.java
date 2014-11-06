@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.Scanner;
 import java.util.regex.PatternSyntaxException;
@@ -187,7 +188,8 @@ public class SearchRunner {
 	 	int i =0;
 	 	stream.println(calculateTime(System.currentTimeMillis())+"ms");
 		stream.println(getUserQuery());
-		for (Map.Entry<Double, String> entry:FinalScore.entrySet()){
+		NavigableMap <Double,String>fs = FinalScore.descendingMap();
+		for (Map.Entry<Double, String> entry:fs.entrySet()){
 			String doc = entry.getValue();
 			stream.println((i+1)+"\t"+doc+"\t"+entry.getKey());
 			i++;
@@ -238,7 +240,7 @@ public class SearchRunner {
 					
 					times--;
 					 System.out.println(quer.replaceAll("[{}]", ""));
-					 Query Q = parser.parse(quer, "OR");
+					 Query Q = parser.parse(quer.replaceAll("[{}]", ""), "OR");
 					
 					 Reader Readers = new Reader(getIndexDir());
 				     PostingList DocumentList = new PostingList(Q.toString(), Readers, ScoringModel.OKAPI);
@@ -261,8 +263,9 @@ public class SearchRunner {
 				 	int i =0;
 				 	
 				 	String result="";
-					stream.print(query_id);
-					for (Map.Entry<Double, String> entry:FinalScore.entrySet()){
+					
+					NavigableMap <Double,String>fs = FinalScore.descendingMap();
+					for (Map.Entry<Double, String> entry:fs.entrySet()){
 						if(result.isEmpty())
 							result= entry.getValue()+"#"+entry.getKey();
 						else	

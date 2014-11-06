@@ -41,6 +41,7 @@ public class QueryParser {
 			int ended_quote =0;
 			String temp_str="";
 			String category ="";
+			int round_brackets_started =0;
 			for(String word : splitArray){
 				if(word.trim().equals("AND") || word.trim().equals("OR") || word.trim().equals("NOT")){
 					prev_was_word = 0;
@@ -51,10 +52,19 @@ public class QueryParser {
 						prev_got_left_brace =0;
 					}	
 				}else{
+					System.out.println("word is "+word);
+					
+					if(word.equals("(")){
+						round_brackets_started =1;
+						continue;
+					}else if(word.equals("(")){
+						round_brackets_started =0;
+						continue;
+					}
 					//check for phrase query like "pritika mehta"
 					if(word.matches("\"[A-Za-z0-9]+")){
 						started_quote =1;
-						System.out.println("word is "+word);
+						System.out.println("if");
 						if(!word.contains(":")){
 							if(word.contains("{"))
 								temp_str = "{Term:"+word.substring(word.indexOf("{")+1);
@@ -64,13 +74,16 @@ public class QueryParser {
 						else
 							temp_str = word;
 					}else if(word.matches("[A-Za-z0-9]+\"")){
+						System.out.println("else if");
 						ended_quote =1;
 						started_quote=0;
 						temp_str = temp_str +" "+word;
 						val_st.push(temp_str);
 					}else if(started_quote == 1){
+						System.out.println("else if 2");
 						temp_str = temp_str +" "+word;
 					}else{
+						System.out.println("else ");
 						//check for  terms like pritika mehta girl and convert it into (term:pritika OR term:mehta OR term:girl) 
 						if(prev_was_word ==1 ){
 							op_st.push(defaultOperator);
@@ -94,9 +107,12 @@ public class QueryParser {
 									val_st.push("(Term:"+word.trim().substring(1));
 								else
 									val_st.push("Term:"+word);
-							}else		
-								val_st.push(category+":"+word);
+							}else{		
+								System.out.println("in inner else and pushing"+category+":"+word);
+								val_st.push(word);
+							}	
 						}
+						//{Category:oil AND place:Dubai AND ( price OR cost )}
 						if(word.contains(")") && cat_has_started ==1){
 							cat_has_started =0;
 							category ="";
