@@ -48,12 +48,14 @@ public class PostingList {
 	public  HashMap<String, Double> getTFIDF(){
 		return TfIdfMap;
 	}
+	
+	public static HashMap<String, Map<String, Integer>> TermDoc = new  HashMap<String, Map<String, Integer>>();
+	private HashMap<String , Double> docScoreMap = new HashMap<String , Double>();
+	public Collection<String> getList(){
+		String str = getQuery().replaceAll("AND\\s<", "NOT ");
+		str = str.replaceAll("[>]", "");
+		String terms[] = str.split(" ");
 
-	public static HashMap<String, Map<String, Integer>> TermDoc = new HashMap<String, Map<String, Integer>>();
-	private HashMap<String, Double> docScoreMap = new HashMap<String, Double>();
-
-	public Collection<String> getList() {
-		String terms[] = getQuery().split(" ");
 		// Stack for terms
 		Stack<Collection<String>> values = new Stack<Collection<String>>();
 		// Stack for Operators
@@ -271,28 +273,34 @@ public class PostingList {
 		 */
 	}
 
-	public static Collection<String> applyOp(String op, Collection<String> s1,
-			Collection<String> s2) {
-		Iterator it1, it2, it3;
-		it1 = s1.iterator();
-		int count = 0;
-		it2 = s2.iterator();
-		// System.out.println("\nsecond set\n");
 
-		count = 0;
-		if (op.equals("OR")) {
-			Set<String> union = new HashSet<String>(s1);
-			union.addAll(s2);
-		} else if (op.equals("AND")) {
-			s1.retainAll(s2);
-		} else if (op.equals("NOT")) {
-			s1.removeAll(s2);
-		} else {
-			System.out.println("Invalid operator");
-			return null;
-		}
-		it3 = s1.iterator();
-		count = 0;
-		return s1;
+public static Collection<String> applyOp(String op, Collection<String> s1,Collection<String> s2) {
+	Iterator it1,it2,it3;
+	it1 = s1.iterator();
+	int count =0;
+	it2 = s2.iterator();
+	//System.out.println("\nsecond set\n");
+	
+	count =0;
+	if (op.equals("OR")) {
+		Set <String> union = new HashSet<String>(s1);
+		union.addAll(s2);
+	} else if (op.equals("AND")) {
+		s1.retainAll(s2);
+	} else if (op.equals("NOT")) {
+		if(it2.hasNext() && it1.hasNext()){
+			s2.removeAll(s1);
+			s1 = s2;
+		}else if(it2.hasNext())
+			s1 = s2;
+		
+	} else {
+		System.out.println("Invalid operator");
+		return null;
 	}
+	it3 = s1.iterator();
+	count =0;
+	return s1;
+}
+
 }

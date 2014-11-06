@@ -5,6 +5,8 @@ import edu.buffalo.cse.irf14.SearchRunner;
 
 
 
+
+import java.io.File;
 import java.util.Stack;
 import java.util.regex.PatternSyntaxException;
 
@@ -18,11 +20,16 @@ public class Test {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+
 		SearchRunner s = new SearchRunner("/home/archana/Downloads/dfl","",'Q',System.out);
+		File f = new File("/home/archana/Downloads/check.txt");
+		//SearchRunner s = new SearchRunner("/home/pritika/Downloads/dfl","",'E',System.out);
+		//File f = new File("/home/pritika/Downloads/check.txt");
+		s. query(f);
 	}
 
 }
-
+/*
 class Check{
 	
 	public void query(String userQuery, ScoringModel model) {
@@ -63,6 +70,8 @@ class Check{
 						if(!word.contains(":"))
 							temp_str =" Term:"+word;
 						else
+
+							
 							temp_str = word;
 					}else if(word.matches("[A-Za-z0-9]+\"")){
 						ended_quote =1;
@@ -175,4 +184,4 @@ class Check{
 			}
 		return left+" AND <"+new_right;
 	}
-}
+}*/

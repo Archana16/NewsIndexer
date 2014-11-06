@@ -152,12 +152,17 @@ public class CapitalizationFilter extends TokenFilter {
 			int wordNumber = 0;
 			 if(tStreamOld.hasPrevious()){
 					String prev = tStreamOld.previous().getTermText().trim(); // dont remove it 
-					String prev1 = tStreamOld.previous().getTermText().trim(); // dont removeit 
-					Matcher m_inn = pattern1.matcher(prev1);
-					if(m_inn.find()){
+					
+					String prev1 ;
+					if(tStreamOld.hasPrevious()){
+							 prev1 = tStreamOld.previous().getTermText().trim(); // dont removeit 
+						Matcher m_inn = pattern1.matcher(prev1);
+						if(m_inn.find()){
+							token.setTermText(word.toLowerCase());
+						}
+					}else{
 						token.setTermText(word.toLowerCase());
 					}
-			
 			 }
 			while(tStreamOld.hasNext()) {
 				Token tokenAdd = tStreamOld.next();

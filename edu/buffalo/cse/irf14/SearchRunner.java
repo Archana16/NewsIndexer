@@ -27,6 +27,45 @@ import java.util.Collections;
  *
  */
 public class SearchRunner {
+	private long startTime;
+	private String userQuery;
+	private char mode;
+	private PrintStream stream;
+	
+	
+	public void setStream(PrintStream stream){
+		this.stream = stream;
+	}
+	
+	public PrintStream getStream(){
+		return stream;
+	}
+	public void setMode(char mode){
+		this.mode = mode;
+	}
+	
+	public char getMode(){
+		return mode;
+	}
+	public void setUserQuery(String userQuery){
+		this.userQuery = userQuery;
+	}
+	
+	public String getUserQuery(){
+		return userQuery;
+	}
+	public void setStartTime(long startTime){
+		this.startTime = startTime;
+	}
+	public long getStartTime(){
+		return  startTime;
+	}
+	
+	public long calculateTime(long endTime){
+			return endTime - getStartTime();
+	}
+	
+	
 	public enum ScoringModel {TFIDF,OKAPI};
 	
 	/**
@@ -36,28 +75,41 @@ public class SearchRunner {
 	 * @param mode : Mode, one of Q or E
 	 * @param stream: Stream to write output to
 	 */
+	
+	/*
+		a. Query: The user query as input
+		b. Query time: Time taken to execute the query, prepare results and print them in ms.
+		c. Result rank: Rank of a returned result (document) starting from 1.
+		d. Result title: The title of the news article
+		e. Result snippet: A short 2-3 line snippet from the news article indicating its relevance to the query.
+		f. Result relevancy: The relevancy score for the result.
+		g. Term highlighting (optional): If needed you can highlight query terms as found in the results using the HTML markup <b>…</b>
+
+	*/
 	PrintStream output;
 	String indexDir;
 	ScoringModel mod;
 	 TreeMap <Double, String> FinalScore = new TreeMap<Double, String>();
-	public SearchRunner(String indexDir, String corpusDir, 
-			char mode, PrintStream stream) {
+	 
+	public SearchRunner(String indexDir, String corpusDir,char mode, PrintStream stream) {
 			output = stream;
 			this.indexDir = indexDir;
-			askUser(mode);
-			int i =0;
-			
-			for (Map.Entry<Double, String> entry:FinalScore.entrySet()){
-				
-				String doc = entry.getValue();
-				stream.println(doc);
-				i++;
-				if(i==10)
-					break;
-			}
-			if(i==0)
-				System.out.println("No document found");
-			
+			setMode(mode);
+			setStream(stream);
+			/*int i =0;
+			if(mode =='Q'){
+				stream.println(calculateTime(System.currentTimeMillis())+"ms");
+				stream.println(getUserQuery());
+				for (Map.Entry<Double, String> entry:FinalScore.entrySet()){
+					String doc = entry.getValue();
+					stream.println((i+1)+"\t"+doc+"\t"+entry.getKey());
+					i++;
+					if(i==10)
+						break;
+				}
+				if(i==0)
+					System.out.println("No document found");
+			}*/
 		//TODO: IMPLEMENT THIS METHOD
 	}
 	
@@ -83,7 +135,8 @@ public class SearchRunner {
 		    	 query(query,ScoringModel.OKAPI);
 		     else
 		    	 query(query,ScoringModel.TFIDF);
-		}else{
+		     in.close();
+		}else if(mode == 'E'){
 			 File fileName;
 			 System.out.println("Enter file name\n");
 			 fileName = new File(in.nextLine());
@@ -91,6 +144,8 @@ public class SearchRunner {
 			   setModel(in.nextLine());
 			   query(fileName);
 			    
+		}else{
+			System.out.println("ENter a valid mode!");
 		}	
 	}
 	/**
@@ -100,6 +155,8 @@ public class SearchRunner {
 	 */
 	public void query(String userQuery, ScoringModel model) {
 		//TODO: IMPLEMENT THIS METHOD
+		setUserQuery(userQuery);
+		setStartTime(System.currentTimeMillis());
 		 QueryParser parser = new QueryParser();
 	     Query Q = parser.parse(userQuery, "OR");
 	   
@@ -113,6 +170,8 @@ public class SearchRunner {
 	     }
 	     else if(model.equals(ScoringModel.OKAPI)){
 	    	 scoreMap = DocumentList.getDocScoreMap(); 
+	     }else{
+	    	 System.out.println("enter a valid scoring model");
 	     }
 	     Iterator it1;
 	 	it1 = FinalSet.iterator();
@@ -121,6 +180,20 @@ public class SearchRunner {
 	 		Double score = scoreMap.get(docName);
 	 		FinalScore.put(score, docName);
 	 	}
+	 	
+	 	PrintStream stream = getStream();
+	 	int i =0;
+	 	stream.println(calculateTime(System.currentTimeMillis())+"ms");
+		stream.println(getUserQuery());
+		for (Map.Entry<Double, String> entry:FinalScore.entrySet()){
+			String doc = entry.getValue();
+			stream.println((i+1)+"\t"+doc+"\t"+entry.getKey());
+			i++;
+			if(i==10)
+				break;
+		}
+		if(i==0)
+			System.out.println("No document found");
 	    		 
 	 	
 	}
@@ -144,17 +217,67 @@ public class SearchRunner {
 	public void query(File queryFile) {
 		//TODO: IMPLEMENT THIS METHOD
 		try{
-			String str = ""; 
+			setStartTime(System.currentTimeMillis());
+			String str[] = new String[2]; 
+		
 			QueryParser parser = new QueryParser();
 			FileReader reader = new FileReader(queryFile);
 			BufferedReader in = new BufferedReader(reader);
-			while ((str = in.readLine()) != null) {
-				Query Q = parser.parse(str, "OR");
-				query(Q.toString(),getModel());
+			String s = in.readLine();
+			
+			String a[] = s.split("=");
+			int times = Integer.parseInt(a[1]);
+			stream.println("numResults"+a[1]);
+			String cv;
+			while (times>0 && ( cv = in.readLine())!= null) {
+				String query_id = cv.substring(0,cv.indexOf("{")-1);
+					String quer = cv.substring(cv.indexOf("{"));
+					//Q_1A63C:{hello world}
+					
+					times--;
+					 System.out.println(quer.replaceAll("[{}]", ""));
+					 Query Q = parser.parse(quer, "OR");
+					
+					 Reader Readers = new Reader(getIndexDir());
+				     PostingList DocumentList = new PostingList(Q.toString(), Readers, ScoringModel.OKAPI);
+				     Collection <String> FinalSet = DocumentList.getList();
+				     HashMap<String, Double> scoreMap = new  HashMap<String, Double>();
+				    	 //scoreMap = DocumentList.getDocScore();
+				     scoreMap = DocumentList.getDocScoreMap(); 
+				    Iterator it1;
+				 	it1 = FinalSet.iterator();
+				 	while (it1.hasNext()) {
+				 		String docName = (String)it1.next();
+				 		Double score = scoreMap.get(docName);
+				 		FinalScore.put(score, docName);
+				 	}
+				 	
+				 	//numResults=2
+				 	//Q_1A63C:{00217#0.97632, 00062#0.85213}
+				 	
+				 	PrintStream stream = getStream();
+				 	int i =0;
+				 	
+				 	String result="";
+					stream.print(query_id);
+					for (Map.Entry<Double, String> entry:FinalScore.entrySet()){
+						if(result.isEmpty())
+							result= entry.getValue()+"#"+entry.getKey();
+						else	
+							result= result+","+entry.getValue()+"#"+entry.getKey();
+						i++;
+						if(i==10)
+							break;
+					}
+					if(i==0)
+						System.out.println("No document found");
+					else
+						stream.print(query_id+":{"+result+"}");
+				    		 
 				
 			}
 		}catch(Exception e){
-			
+			System.out.println("exception is "+e);
 		}
 		
 	}

@@ -180,7 +180,6 @@ public class IndexReader {
 				Postings p = map.get(termMap.get(query));
 				return p.getDocFreq(); 
 			}
-			
 		}
 		return 0;
 	}

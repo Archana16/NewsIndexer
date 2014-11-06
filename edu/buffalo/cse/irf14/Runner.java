@@ -55,6 +55,7 @@ public class Runner {
 	    long endTime = 0;
 	    System.out.println( "starttime = "+startTime);
 		
+
 	  // String ipDir = "/home/pritika/Downloads/news_training/training";
 	    String ipDir = "/home/archana/workspace-ir/IR/training/";
 		//String indexDir = "/home/pritika/Downloads/dfl";

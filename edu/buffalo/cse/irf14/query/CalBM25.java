@@ -14,7 +14,7 @@ public class CalBM25 {
 		double k = 1.6;
 		double b =0.75;
 		double  score = idf *((freqInDoc*(k+1))/(freqInDoc+k*(1-b+(b*docLength)/averageDocLength))); 
-		System.out.println("doc is "+doc+" score is "+score);
+		//System.out.println("doc is "+doc+" score is "+score);
 		insertInDocScoremap(doc,score);
 	}
 	
