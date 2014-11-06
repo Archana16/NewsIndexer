@@ -18,7 +18,7 @@ public class Reader {
 		PlaceIndex = new IndexReader(indexDir, IndexType.PLACE);
 		CategoryIndex = new IndexReader(indexDir, IndexType.CATEGORY);
 		TermIndex = new IndexReader(indexDir, IndexType.TERM);
-		System.out.printf("exiting");
+		
 	}
 	public IndexReader getReader(IndexType type) {
 		switch (type) {

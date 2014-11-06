@@ -54,8 +54,13 @@ public class QueryParser {
 					//check for phrase query like "pritika mehta"
 					if(word.matches("\"[A-Za-z0-9]+")){
 						started_quote =1;
-						if(!word.contains(":"))
-							temp_str =" Term:"+word;
+						System.out.println("word is "+word);
+						if(!word.contains(":")){
+							if(word.contains("{"))
+								temp_str = "{Term:"+word.substring(word.indexOf("{")+1);
+							else
+								temp_str =" Term:"+word;
+						}	
 						else
 							temp_str = word;
 					}else if(word.matches("[A-Za-z0-9]+\"")){
@@ -142,7 +147,7 @@ public class QueryParser {
 			String po = val_st.pop();
 			//System.out.println(" ols is :"+po);
 			final_val = "{ "+po.replaceAll("\\(", "[ ").replaceAll("\\)", " ]")+" }";
-			System.out.println("----------------- "+final_val);
+			System.out.println("parsed query =  "+final_val);
 		}
 		return final_val;
 		

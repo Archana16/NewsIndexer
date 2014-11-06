@@ -40,7 +40,9 @@ public class PostingList {
 	public static HashMap<String, Map<String, Integer>> TermDoc = new  HashMap<String, Map<String, Integer>>();
 	private HashMap<String , Double> docScoreMap = new HashMap<String , Double>();
 	public Collection<String> getList(){
-		String terms[] = getQuery().split(" ");
+		String str = getQuery().replaceAll("AND\\s<", "NOT ");
+		str = str.replaceAll("[>]", "");
+		String terms[] = str.split(" ");
 		// Stack for terms
 		Stack<Collection<String>> values = new Stack<Collection<String>>();
 		// Stack for Operators
@@ -105,8 +107,7 @@ public static IndexType getType(String type) {
 
 public Collection<String> getPosting(String str) {
 	Collection<String> Set = Collections.emptySet();
-	str = str.replaceAll("[<,>]", "");
-	//System.out.println("terms->" + str);
+	
 	if(!str.isEmpty()){
 		
 		String terms[] = str.split(":");
@@ -217,7 +218,12 @@ public static Collection<String> applyOp(String op, Collection<String> s1,
 	} else if (op.equals("AND")) {
 		s1.retainAll(s2);
 	} else if (op.equals("NOT")) {
-		s1.removeAll(s2);
+		if(it2.hasNext() && it1.hasNext()){
+			s2.removeAll(s1);
+			s1 = s2;
+		}else if(it2.hasNext())
+			s1 = s2;
+		
 	} else {
 		System.out.println("Invalid operator");
 		return null;
